@@ -1,4 +1,13 @@
-package kendzi.josm.plugin.tomb;
+/*
+ * This software is provided "AS IS" without a warranty of any kind.
+ * You use it on your own risk and responsibility!!!
+ *
+ * This file is shared under BSD v3 license.
+ * See readme.txt and BSD3 file for details.
+ *
+ */
+
+package kendzi.josm.plugin.tomb.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -23,6 +32,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ *
+ * @author Tomasz Kędziora (Kendzi)
+ */
 public class TombDialog extends JDialog {
 
     private final JPanel contentPanel = new JPanel();

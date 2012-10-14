@@ -1,4 +1,13 @@
-package kendzi.josm.plugin.tomb;
+/*
+ * This software is provided "AS IS" without a warranty of any kind.
+ * You use it on your own risk and responsibility!!!
+ *
+ * This file is shared under BSD v3 license.
+ * See readme.txt and BSD3 file for details.
+ *
+ */
+
+package kendzi.josm.plugin.tomb.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -11,6 +20,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import kendzi.josm.plugin.tomb.dto.PersonModel;
+
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.command.AddCommand;
 import org.openstreetmap.josm.command.ChangeCommand;
@@ -20,8 +31,14 @@ import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Relation;
 import org.openstreetmap.josm.data.osm.RelationMember;
 
+/**
+ *
+ * @author Tomasz Kędziora (Kendzi)
+ */
 public class TombDialogAction extends TombDialog {
 
+    private static final String KEY_FROM_FAMILY = "from_family";
+    private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_DEATH = "death";
     private static final String KEY_BIRTH = "birth";
@@ -39,6 +56,7 @@ public class TombDialogAction extends TombDialog {
 
     private Node node;
     private PersonTableModel personTableModel;
+
 
     public TombDialogAction() {
 
@@ -63,21 +81,21 @@ public class TombDialogAction extends TombDialog {
         });
     }
 
-    void Load(Node node) {
+    public void Load(Node node) {
         this.node = node;
         fillAttributes(node);
 
-        persons = loadPersons(node);
-        personsRemoved = new HashSet<Relation>();
+        this.persons = loadPersons(node);
+        this.personsRemoved = new HashSet<Relation>();
 
-        fillPersons(persons, personsRemoved);
+        fillPersons(this.persons, this.personsRemoved);
     }
 
     private void fillPersons(List<PersonModel> persons, Set<Relation> personsRemoved) {
 
-        personTableModel = new PersonTableModel(persons);
+        this.personTableModel = new PersonTableModel(persons);
 
-        personsTable.setModel(personTableModel);
+        this.personsTable.setModel(this.personTableModel);
 
     }
 
@@ -106,6 +124,8 @@ public class TombDialogAction extends TombDialog {
         pm.setDeath(osmPrimitive.get(KEY_DEATH));
         pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
+        pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
+        pm.setFromFamily(osmPrimitive.get(KEY_FROM_FAMILY));
 
         pm.setRelation(osmPrimitive);
         return pm;
@@ -113,11 +133,11 @@ public class TombDialogAction extends TombDialog {
 
     private void fillAttributes(Node node) {
 
-        cbTombType.setSelectedItem(node.get(KEY_TOMB));
-        cbReligion.setSelectedItem(node.get(KEY_RELIGION));
+        this.cbTombType.setSelectedItem(node.get(KEY_TOMB));
+        this.cbReligion.setSelectedItem(node.get(KEY_RELIGION));
 
-        txtWikipedia.setText(node.get(KEY_WIKIPEDIA));
-        txtImage.setText(node.get(KEY_IMAGE));
+        this.txtWikipedia.setText(node.get(KEY_WIKIPEDIA));
+        this.txtImage.setText(node.get(KEY_IMAGE));
 
     }
 
@@ -132,11 +152,11 @@ public class TombDialogAction extends TombDialog {
     @Override
     protected void onAddPerson() {
 
-        int rowId = personTableModel.addPersonModel(new PersonModel());
+        int rowId = this.personTableModel.addPersonModel(new PersonModel());
 
         //    	personsTable.setRowSelectionInterval(rowId, rowId);
-        personsTable.changeSelection(rowId, 0, false, false);
-        personsTable.requestFocus();
+        this.personsTable.changeSelection(rowId, 0, false, false);
+        this.personsTable.requestFocus();
 
         //    	personsTable.setFocusable(true);
         //    	persons.add(new PersonModel());
@@ -145,10 +165,10 @@ public class TombDialogAction extends TombDialog {
 
     @Override
     protected void onRemovePerson(int [] rowsId) {
-        PersonModel pm = personTableModel.removePersonModel(rowsId);
+        PersonModel pm = this.personTableModel.removePersonModel(rowsId);
 
         if (pm != null && pm.getRelation() != null) {
-            personsRemoved.add(pm.getRelation());
+            this.personsRemoved.add(pm.getRelation());
         }
     }
 
@@ -162,8 +182,8 @@ public class TombDialogAction extends TombDialog {
     }
 
     private void stopEdit() {
-        if (personsTable.isEditing()) {
-            personsTable.getCellEditor().stopCellEditing();
+        if (this.personsTable.isEditing()) {
+            this.personsTable.getCellEditor().stopCellEditing();
         }
     }
 
@@ -179,14 +199,14 @@ public class TombDialogAction extends TombDialog {
 
     private void injectNode(Node n) {
 
-        n.put(KEY_TOMB, blankOnNull((String) cbTombType.getSelectedItem()));
-        n.put(KEY_RELIGION, blankOnNull((String) cbReligion.getSelectedItem()));
+        n.put(KEY_TOMB, nullOnBlank((String) this.cbTombType.getSelectedItem()));
+        n.put(KEY_RELIGION, nullOnBlank((String) this.cbReligion.getSelectedItem()));
 
-        n.put(KEY_WIKIPEDIA, blankOnNull(txtWikipedia.getText()));
-        n.put(KEY_IMAGE, blankOnNull(txtImage.getText()));
+        n.put(KEY_WIKIPEDIA, nullOnBlank(this.txtWikipedia.getText()));
+        n.put(KEY_IMAGE, nullOnBlank(this.txtImage.getText()));
     }
 
-    private String blankOnNull(String str) {
+    private String nullOnBlank(String str) {
         if (str == null) {
             return null;
         }
@@ -258,11 +278,14 @@ public class TombDialogAction extends TombDialog {
      * @param newRelation
      */
     public void injectRelation(PersonModel pm, Relation newRelation) {
-        newRelation.put(KEY_NAME, pm.getName());
-        newRelation.put(KEY_BIRTH, pm.getBirth());
-        newRelation.put(KEY_DEATH, pm.getDeath());
-        newRelation.put(KEY_WIKIPEDIA, pm.getWikipedia());
-        newRelation.put(KEY_DESCRIPTION, pm.getDescription());
+        newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
+        newRelation.put(KEY_BIRTH, nullOnBlank(pm.getBirth()));
+        newRelation.put(KEY_DEATH, nullOnBlank(pm.getDeath()));
+        newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
+        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));
+
+        newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));
+        newRelation.put(KEY_FROM_FAMILY, nullOnBlank(pm.getFromFamily()));
     }
 
 }

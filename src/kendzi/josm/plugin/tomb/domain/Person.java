@@ -1,10 +1,21 @@
-package kendzi.josm.plugin.tomb;
+/*
+ * This software is provided "AS IS" without a warranty of any kind.
+ * You use it on your own risk and responsibility!!!
+ *
+ * This file is shared under BSD v3 license.
+ * See readme.txt and BSD3 file for details.
+ *
+ */
 
-import org.openstreetmap.josm.data.osm.Relation;
+package kendzi.josm.plugin.tomb.domain;
 
 
-public class PersonModel {
-    Relation relation;
+
+/**
+ *
+ * @author Tomasz Kędziora (Kendzi)
+ */
+public class Person {
 
     //	name=imie nazwisko
     String name;
@@ -21,25 +32,15 @@ public class PersonModel {
     //			description - luzny opis, np. grupy zawodowej
     String description;
 
-    /**
-     * @return the relation
-     */
-    public Relation getRelation() {
-        return relation;
-    }
+    String livedIn;
 
-    /**
-     * @param relation the relation to set
-     */
-    public void setRelation(Relation relation) {
-        this.relation = relation;
-    }
+    String fromFamily;
 
     /**
      * @return the name
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -53,7 +54,7 @@ public class PersonModel {
      * @return the wikipedia
      */
     public String getWikipedia() {
-        return wikipedia;
+        return this.wikipedia;
     }
 
     /**
@@ -67,7 +68,7 @@ public class PersonModel {
      * @return the birth
      */
     public String getBirth() {
-        return birth;
+        return this.birth;
     }
 
     /**
@@ -81,7 +82,7 @@ public class PersonModel {
      * @return the death
      */
     public String getDeath() {
-        return death;
+        return this.death;
     }
 
     /**
@@ -95,7 +96,7 @@ public class PersonModel {
      * @return the description
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -104,6 +105,35 @@ public class PersonModel {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    /**
+     * @return the livedIn
+     */
+    public String getLivedIn() {
+        return livedIn;
+    }
+
+    /**
+     * @param livedIn the livedIn to set
+     */
+    public void setLivedIn(String livedIn) {
+        this.livedIn = livedIn;
+    }
+
+    /**
+     * @return the fromFamily
+     */
+    public String getFromFamily() {
+        return fromFamily;
+    }
+
+    /**
+     * @param fromFamily the fromFamily to set
+     */
+    public void setFromFamily(String fromFamily) {
+        this.fromFamily = fromFamily;
+    }
+
 
 
 

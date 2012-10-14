@@ -1,4 +1,4 @@
-package kendzi.josm.plugin.tomb;
+package kendzi.josm.plugin.tomb.action;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
 
@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
+import kendzi.josm.plugin.tomb.ui.TombDialogAction;
 
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
