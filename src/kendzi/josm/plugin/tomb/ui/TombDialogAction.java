@@ -40,8 +40,8 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_FROM_FAMILY = "from_family";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_DEATH = "death";
-    private static final String KEY_BIRTH = "birth";
+    private static final String KEY_DEATH = "died";
+    private static final String KEY_BIRTH = "born";
     private static final String KEY_NAME = "name";
     private static final String KEY_PERSON = "person";
     private static final String KEY_TYPE = "type";
