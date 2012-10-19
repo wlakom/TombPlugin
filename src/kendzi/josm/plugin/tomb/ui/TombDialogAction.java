@@ -9,6 +9,9 @@
 
 package kendzi.josm.plugin.tomb.ui;
 
+
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
@@ -30,6 +34,8 @@ import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Relation;
 import org.openstreetmap.josm.data.osm.RelationMember;
+import org.openstreetmap.josm.tools.I18n;
+import org.openstreetmap.josm.tools.ImageProvider;
 
 /**
  *
@@ -61,6 +67,19 @@ public class TombDialogAction extends TombDialog {
     public TombDialogAction() {
 
         bindHotKey();
+
+        localize();
+
+        loadIcon();
+    }
+
+    private void loadIcon() {
+
+        ImageIcon imageIcon = ImageProvider.get("tomb_icon.png");
+
+        if (imageIcon != null) {
+            setIconImage(imageIcon.getImage());
+        }
     }
 
     /**
@@ -93,7 +112,12 @@ public class TombDialogAction extends TombDialog {
 
     private void fillPersons(List<PersonModel> persons, Set<Relation> personsRemoved) {
 
-        this.personTableModel = new PersonTableModel(persons);
+        this.personTableModel = new PersonTableModel(persons) {
+            @Override
+            public String tr(String str) {
+                return I18n.tr(str);
+            }
+        };
 
         this.personsTable.setModel(this.personTableModel);
 
@@ -286,6 +310,20 @@ public class TombDialogAction extends TombDialog {
 
         newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));
         newRelation.put(KEY_FROM_FAMILY, nullOnBlank(pm.getFromFamily()));
+    }
+
+    public void localize() {
+        try {
+            getLblTomb().setText(tr("Tomb"));
+            getLblTombType().setText(tr("Tomb type"));
+            getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
+            getLblReligion().setText(tr("Religion"));
+            getLblTombData().setText(tr("Tomb data"));
+            getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
+            getLblImage().setText("- " + tr("image"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

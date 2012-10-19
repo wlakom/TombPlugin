@@ -44,6 +44,13 @@ public class TombDialog extends JDialog {
     protected JTextField txtImage;
     protected JComboBox cbTombType;
     protected JComboBox cbReligion;
+    private JLabel lblTombType;
+    private JLabel lblOptionalAttributes;
+    private JLabel lblReligion;
+    private JLabel lblTombData;
+    private JLabel lblWikipediaArticle;
+    private JLabel lblImage;
+    private JLabel lblTomb;
 
 
     /**
@@ -73,7 +80,7 @@ public class TombDialog extends JDialog {
             contentPanel.add(panel, BorderLayout.WEST);
             panel.setLayout(new BorderLayout(0, 0));
             {
-                JLabel lblTomb = new JLabel("Tomb");
+                lblTomb = new JLabel("Tomb");
                 panel.add(lblTomb, BorderLayout.NORTH);
             }
             {
@@ -97,7 +104,7 @@ public class TombDialog extends JDialog {
                         FormFactory.RELATED_GAP_ROWSPEC,
                         FormFactory.DEFAULT_ROWSPEC,}));
                 {
-                    JLabel lblTombType = new JLabel("Tomb type");
+                    lblTombType = new JLabel("Tomb type");
                     panel_1.add(lblTombType, "1, 3, left, default");
                 }
                 {
@@ -107,11 +114,11 @@ public class TombDialog extends JDialog {
                     panel_1.add(cbTombType, "2, 3, fill, default");
                 }
                 {
-                    JLabel lblOptionalAttributes = new JLabel("Optional Attributes:");
+                    lblOptionalAttributes = new JLabel("Optional Attributes:");
                     panel_1.add(lblOptionalAttributes, "1, 5, left, default");
                 }
                 {
-                    JLabel lblReligion = new JLabel("Religion");
+                    lblReligion = new JLabel("Religion");
                     panel_1.add(lblReligion, "1, 7, left, default");
                 }
                 {
@@ -121,11 +128,11 @@ public class TombDialog extends JDialog {
                     panel_1.add(cbReligion, "2, 7, fill, default");
                 }
                 {
-                    JLabel lblTombData = new JLabel("Tomb data");
+                    lblTombData = new JLabel("Tomb data");
                     panel_1.add(lblTombData, "1, 9");
                 }
                 {
-                    JLabel lblWikipediaArticle = new JLabel("- wikipedia article");
+                    lblWikipediaArticle = new JLabel("- wikipedia article");
                     panel_1.add(lblWikipediaArticle, "1, 11, left, default");
                 }
                 {
@@ -134,7 +141,7 @@ public class TombDialog extends JDialog {
                     txtWikipedia.setColumns(10);
                 }
                 {
-                    JLabel lblImage = new JLabel("- image");
+                    lblImage = new JLabel("- image");
                     panel_1.add(lblImage, "1, 13, left, default");
                 }
                 {
@@ -172,6 +179,7 @@ public class TombDialog extends JDialog {
                 panel.add(panel_tableButtons, BorderLayout.SOUTH);
                 {
                     JButton btnAddPerson = new JButton("New");
+                    btnAddPerson.setToolTipText("New person (Ctrl-n)");
                     btnAddPerson.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent arg0) {
                             onAddPerson();
@@ -233,4 +241,25 @@ public class TombDialog extends JDialog {
         //
     }
 
+    protected JLabel getLblTombType() {
+        return lblTombType;
+    }
+    protected JLabel getLblOptionalAttributes() {
+        return lblOptionalAttributes;
+    }
+    public JLabel getLblReligion() {
+        return lblReligion;
+    }
+    public JLabel getLblTombData() {
+        return lblTombData;
+    }
+    public JLabel getLblWikipediaArticle() {
+        return lblWikipediaArticle;
+    }
+    public JLabel getLblImage() {
+        return lblImage;
+    }
+    public JLabel getLblTomb() {
+        return lblTomb;
+    }
 }

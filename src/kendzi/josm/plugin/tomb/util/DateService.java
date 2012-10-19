@@ -19,9 +19,9 @@ import java.util.Date;
 public class DateService {
 
     SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat v1Format = new SimpleDateFormat("dd-MM-yyyy");
-    SimpleDateFormat v2Format = new SimpleDateFormat("dd.MM.yyyy");
-    SimpleDateFormat v3Format = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat v1Format = new SimpleDateFormat("d-MM-yyyy");
+    SimpleDateFormat v2Format = new SimpleDateFormat("d.MM.yyyy");
+    SimpleDateFormat v3Format = new SimpleDateFormat("d/MM/yyyy");
 
     String convertDateFormat(String str, SimpleDateFormat inFormat, SimpleDateFormat outFormat) {
 

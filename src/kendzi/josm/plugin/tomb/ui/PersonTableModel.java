@@ -23,11 +23,24 @@ import kendzi.josm.plugin.tomb.util.DateService;
  * 
  * @author Tomasz Kędziora (Kendzi)
  */
-class PersonTableModel extends AbstractTableModel {
+public class PersonTableModel extends AbstractTableModel {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     DateService dateService = new DateService();
 
-    private String[] columnNames = {"Name", "Birth", "Death", "Wikipedia", "Description", "Lived in", "From family"};
+    private String[] columnNames = {
+            tr("Name"),
+            tr("Date of birth"),
+            tr("Date of death"),
+            tr("Wikipedia"),
+            tr("Description"),
+            tr("Lived in"),
+            tr("Family name")
+    };
 
     private List<PersonModel> data = new ArrayList<PersonModel>();
 
@@ -47,6 +60,14 @@ class PersonTableModel extends AbstractTableModel {
     public String getColumnName(int col) {
         return this.columnNames[col];
     }
+
+    public String tr(String str) {
+        return str;
+    }
+
+    //    public void setColumnName(int col, String value) {
+    //        this.columnNames[col] = value;
+    //    }
 
     public Object getValueAt(int row, int col) {
         if (row >= getRowCount()) {
