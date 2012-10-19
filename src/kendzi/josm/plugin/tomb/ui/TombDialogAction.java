@@ -12,6 +12,8 @@ package kendzi.josm.plugin.tomb.ui;
 
 import static org.openstreetmap.josm.tools.I18n.tr;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -20,9 +22,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.table.TableCellEditor;
 
 import kendzi.josm.plugin.tomb.dto.PersonModel;
 
@@ -71,7 +77,31 @@ public class TombDialogAction extends TombDialog {
         localize();
 
         loadIcon();
+
+        cellRenderer();
+
     }
+
+    private void cellRenderer() {
+
+        //        personsTable.setDefaultEditor(String.class,
+        //                new BigFontCellEditor());
+    }
+
+    public class BigFontCellEditor extends AbstractCellEditor implements TableCellEditor {
+        JTextField component = new JTextField();
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
+            component.setText((String)value);
+            component.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            return component;
+        }
+        @Override
+        public Object getCellEditorValue() {
+            return component.getText();
+        }
+    }
+
+
 
     private void loadIcon() {
 
@@ -121,6 +151,8 @@ public class TombDialogAction extends TombDialog {
 
         this.personsTable.setModel(this.personTableModel);
 
+        personsTable.getColumnModel().getColumn(1).setPreferredWidth(30);
+        personsTable.getColumnModel().getColumn(2).setPreferredWidth(30);
     }
 
     private List<PersonModel> loadPersons(Node node) {
@@ -175,6 +207,8 @@ public class TombDialogAction extends TombDialog {
 
     @Override
     protected void onAddPerson() {
+
+        stopEdit();
 
         int rowId = this.personTableModel.addPersonModel(new PersonModel());
 

@@ -70,7 +70,7 @@ public class TombDialog extends JDialog {
      * Create the dialog.
      */
     public TombDialog() {
-        setBounds(100, 100, 700, 400);
+        setBounds(100, 100, 1024, 600);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -162,6 +162,9 @@ public class TombDialog extends JDialog {
                 panel.add(scrollPane);
                 {
                     personsTable = new JTable();
+                    //                    personsTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+                    //                    personsTable.setRowHeight(20);
+
                     personsTable.setModel(new DefaultTableModel(
                             new Object[][] {
                                     {"1", "2", "3"},
