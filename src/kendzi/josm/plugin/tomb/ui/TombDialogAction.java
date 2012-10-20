@@ -40,6 +40,7 @@ import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Relation;
 import org.openstreetmap.josm.data.osm.RelationMember;
+import org.openstreetmap.josm.gui.tagging.ac.AutoCompletingTextField;
 import org.openstreetmap.josm.tools.I18n;
 import org.openstreetmap.josm.tools.ImageProvider;
 
@@ -72,6 +73,8 @@ public class TombDialogAction extends TombDialog {
 
     public TombDialogAction() {
 
+        super();
+
         bindHotKey();
 
         localize();
@@ -79,6 +82,39 @@ public class TombDialogAction extends TombDialog {
         loadIcon();
 
         cellRenderer();
+
+        setupTombTypeCombo();
+
+    }
+
+    private void setupTombTypeCombo() {
+
+        IconListRenderer ilr = new IconListRenderer() {
+            @Override
+            public ImageIcon loadImage(String key) {
+                try {
+                    return ImageProvider.get("cc2/tomb_"+key+".jpg");
+                } catch (Exception e) {
+                    //
+                }
+                return null;
+
+            };
+
+            @Override
+            public String tr(String str) {
+                return I18n.tr(str);
+            }
+        };
+
+        getCbTombType().setEditable(true);
+        //        getCbTombType().setModel(new DefaultComboBoxModel(new String[] {"details", "computer", "folder", "computer"}));
+
+
+        getCbTombType().setRenderer(ilr);
+        AutoCompletingTextField tf = new AutoCompletingTextField();
+
+        getCbTombType().setEditor(tf);
 
     }
 

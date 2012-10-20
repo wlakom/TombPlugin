@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -52,7 +53,6 @@ public class TombDialog extends JDialog {
     private JLabel lblImage;
     private JLabel lblTomb;
 
-
     /**
      * Launch the application.
      */
@@ -87,7 +87,7 @@ public class TombDialog extends JDialog {
                 panel_1.setLayout(new FormLayout(new ColumnSpec[] {
                         ColumnSpec.decode("100px"),
                         FormFactory.RELATED_GAP_COLSPEC,
-                        ColumnSpec.decode("120px"),
+                        ColumnSpec.decode("220px"),
                         ColumnSpec.decode("30dlu"),
                         FormFactory.DEFAULT_COLSPEC,
                         FormFactory.RELATED_GAP_COLSPEC,
@@ -116,7 +116,7 @@ public class TombDialog extends JDialog {
                 {
                     cbTombType = new JComboBox();
                     cbTombType.setEditable(true);
-                    cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "crypt"}));
+                    cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "sarcophagus", "vault", "crypt"}));
                     panel_1.add(cbTombType, "3, 3, fill, default");
                 }
                 {
@@ -260,5 +260,8 @@ public class TombDialog extends JDialog {
     }
     public JLabel getLblTomb() {
         return lblTomb;
+    }
+    public JComboBox getCbTombType() {
+        return cbTombType;
     }
 }
