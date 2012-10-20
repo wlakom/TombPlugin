@@ -33,7 +33,7 @@ public class PersonTableModel extends AbstractTableModel {
     DateService dateService = new DateService();
 
     private String[] columnNames = {
-            tr("Name"),
+            tr("Name of person"),
             tr("Date of birth"),
             tr("Date of death"),
             tr("Wikipedia"),
