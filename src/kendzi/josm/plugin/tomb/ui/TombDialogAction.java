@@ -350,7 +350,7 @@ public class TombDialogAction extends TombDialog {
         try {
             getLblTomb().setText(tr("Tomb"));
             getLblTombType().setText(tr("Tomb type"));
-            getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
+            //getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
             getLblReligion().setText(tr("Religion"));
             getLblTombData().setText(tr("Tomb data"));
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));

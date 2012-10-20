@@ -33,12 +33,15 @@
     <property name="plugin.main.version" value="3835" />
 
 
-    <property name="josm" location="../JOSM/dist/josm-custom.jar"/>
+	<!-- stupid egit does not know how to use workspace... -->
+    <property name="plugin.dist.dir" value="c:/java/workspace/sun/JOSM/dist"/>
+  <!--  <property name="plugin.dist.dir" value="../JOSM/dist"/> -->
+    <property name="josm" location="${plugin.dist.dir}/josm-custom.jar"/>
+	
     <property name="plugin.build.dir" value="build"/>
     <property name="plugin.src.dir" value="src"/>
 <!-- this is the directory where the plugin jar is copied to -->
     <property name="ant.build.javac.target" value="1.6"/>
-    <property name="plugin.dist.dir" value="../JOSM/dist"/>
 
     <property name="plugin.jar" value="${plugin.dist.dir}/${ant.project.name}.jar"/>
 

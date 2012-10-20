@@ -11,6 +11,7 @@ package kendzi.josm.plugin.tomb.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,7 +46,6 @@ public class TombDialog extends JDialog {
     protected JComboBox cbTombType;
     protected JComboBox cbReligion;
     private JLabel lblTombType;
-    private JLabel lblOptionalAttributes;
     private JLabel lblReligion;
     private JLabel lblTombData;
     private JLabel lblWikipediaArticle;
@@ -70,25 +70,28 @@ public class TombDialog extends JDialog {
      * Create the dialog.
      */
     public TombDialog() {
-        setBounds(100, 100, 1024, 600);
+        setTitle("Tomb editor");
+        setBounds(100, 100, 1024, 400);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout(0, 0));
         {
             JPanel panel = new JPanel();
-            contentPanel.add(panel, BorderLayout.WEST);
+            panel.setBorder(new EmptyBorder(0, 0, 0, 0));
+            contentPanel.add(panel, BorderLayout.NORTH);
             panel.setLayout(new BorderLayout(0, 0));
-            {
-                lblTomb = new JLabel("Tomb");
-                panel.add(lblTomb, BorderLayout.NORTH);
-            }
             {
                 JPanel panel_1 = new JPanel();
                 panel.add(panel_1, BorderLayout.CENTER);
                 panel_1.setLayout(new FormLayout(new ColumnSpec[] {
-                        ColumnSpec.decode("100px:grow"),
-                        ColumnSpec.decode("120px:grow"),},
+                        ColumnSpec.decode("100px"),
+                        FormFactory.RELATED_GAP_COLSPEC,
+                        ColumnSpec.decode("120px"),
+                        ColumnSpec.decode("30dlu"),
+                        FormFactory.DEFAULT_COLSPEC,
+                        FormFactory.RELATED_GAP_COLSPEC,
+                        ColumnSpec.decode("default:grow"),},
                         new RowSpec[] {
                         FormFactory.DEFAULT_ROWSPEC,
                         FormFactory.RELATED_GAP_ROWSPEC,
@@ -96,64 +99,59 @@ public class TombDialog extends JDialog {
                         FormFactory.RELATED_GAP_ROWSPEC,
                         FormFactory.DEFAULT_ROWSPEC,
                         FormFactory.RELATED_GAP_ROWSPEC,
-                        FormFactory.DEFAULT_ROWSPEC,
-                        FormFactory.RELATED_GAP_ROWSPEC,
-                        FormFactory.DEFAULT_ROWSPEC,
-                        FormFactory.RELATED_GAP_ROWSPEC,
-                        FormFactory.DEFAULT_ROWSPEC,
-                        FormFactory.RELATED_GAP_ROWSPEC,
-                        FormFactory.DEFAULT_ROWSPEC,}));
+                        RowSpec.decode("12dlu"),}));
+                {
+                    lblTomb = new JLabel("Tomb");
+                    panel_1.add(lblTomb, "1, 1");
+                }
+                {
+                    lblTombData = new JLabel("Tomb data");
+                    panel_1.add(lblTombData, "5, 1");
+                }
                 {
                     lblTombType = new JLabel("Tomb type");
+                    lblTombType.setFont(new Font("Tahoma", Font.BOLD, 11));
                     panel_1.add(lblTombType, "1, 3, left, default");
                 }
                 {
                     cbTombType = new JComboBox();
                     cbTombType.setEditable(true);
                     cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "crypt"}));
-                    panel_1.add(cbTombType, "2, 3, fill, default");
+                    panel_1.add(cbTombType, "3, 3, fill, default");
                 }
                 {
-                    lblOptionalAttributes = new JLabel("Optional Attributes:");
-                    panel_1.add(lblOptionalAttributes, "1, 5, left, default");
+                    lblWikipediaArticle = new JLabel("- wikipedia article");
+                    panel_1.add(lblWikipediaArticle, "5, 3, left, default");
+                }
+                {
+                    txtWikipedia = new JTextField();
+                    panel_1.add(txtWikipedia, "7, 3, fill, default");
+                    txtWikipedia.setColumns(10);
                 }
                 {
                     lblReligion = new JLabel("Religion");
-                    panel_1.add(lblReligion, "1, 7, left, default");
+                    panel_1.add(lblReligion, "1, 5, left, default");
                 }
                 {
                     cbReligion = new JComboBox();
                     cbReligion.setEditable(true);
                     cbReligion.setModel(new DefaultComboBoxModel(new String[] {"", "christian", "jewish", "muslim"}));
-                    panel_1.add(cbReligion, "2, 7, fill, default");
-                }
-                {
-                    lblTombData = new JLabel("Tomb data");
-                    panel_1.add(lblTombData, "1, 9");
-                }
-                {
-                    lblWikipediaArticle = new JLabel("- wikipedia article");
-                    panel_1.add(lblWikipediaArticle, "1, 11, left, default");
-                }
-                {
-                    txtWikipedia = new JTextField();
-                    panel_1.add(txtWikipedia, "2, 11, fill, default");
-                    txtWikipedia.setColumns(10);
+                    panel_1.add(cbReligion, "3, 5, fill, default");
                 }
                 {
                     lblImage = new JLabel("- image");
-                    panel_1.add(lblImage, "1, 13, left, default");
+                    panel_1.add(lblImage, "5, 5, left, default");
                 }
                 {
                     txtImage = new JTextField();
-                    panel_1.add(txtImage, "2, 13, fill, default");
+                    panel_1.add(txtImage, "7, 5, fill, default");
                     txtImage.setColumns(10);
                 }
             }
         }
         {
             JPanel panel = new JPanel();
-            panel.setBorder(new EmptyBorder(0, 3, 0, 0));
+            panel.setBorder(new EmptyBorder(0, 0, 0, 0));
             contentPanel.add(panel, BorderLayout.CENTER);
             panel.setLayout(new BorderLayout(0, 0));
             {
@@ -247,9 +245,7 @@ public class TombDialog extends JDialog {
     protected JLabel getLblTombType() {
         return lblTombType;
     }
-    protected JLabel getLblOptionalAttributes() {
-        return lblOptionalAttributes;
-    }
+
     public JLabel getLblReligion() {
         return lblReligion;
     }
