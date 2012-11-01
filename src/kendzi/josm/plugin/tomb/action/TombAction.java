@@ -19,6 +19,7 @@ import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.command.AddCommand;
 import org.openstreetmap.josm.command.DeleteCommand;
 import org.openstreetmap.josm.data.osm.Node;
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Way;
 import org.openstreetmap.josm.tools.Shortcut;
 
@@ -43,18 +44,17 @@ public class TombAction extends JosmAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        //        Collection<Way> selectedWays = Main.main.getCurrentDataSet().getSelectedWays();
-        Collection<Node> selectedWays = Main.main.getCurrentDataSet().getSelectedNodes();
+        Collection<OsmPrimitive> selectedPrimitive = Main.main.getCurrentDataSet().getSelectedNodesAndWays();
 
-        if (selectedWays.size() != 1) {
+        if (selectedPrimitive.size() != 1) {
             JOptionPane.showMessageDialog(null,
-                    tr("Chose one node"),
+                    tr("Choose one node or way"),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Node node = selectedWays.iterator().next();
+        OsmPrimitive tombPrimitive = selectedPrimitive.iterator().next();
 
 
         try {
@@ -62,7 +62,7 @@ public class TombAction extends JosmAction {
             //            TombDialog dialog = new TombDialog();
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-            dialog.Load(node);
+            dialog.Load(tombPrimitive);
 
             dialog.setVisible(true);
 

@@ -40,6 +40,7 @@ import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.Relation;
 import org.openstreetmap.josm.data.osm.RelationMember;
+import org.openstreetmap.josm.data.osm.Way;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletingTextField;
 import org.openstreetmap.josm.tools.I18n;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -67,7 +68,7 @@ public class TombDialogAction extends TombDialog {
     private List<PersonModel> persons;
     private Set<Relation> personsRemoved;
 
-    private Node node;
+    private OsmPrimitive tombPrimitive;
     private PersonTableModel personTableModel;
 
 
@@ -166,11 +167,11 @@ public class TombDialogAction extends TombDialog {
         });
     }
 
-    public void Load(Node node) {
-        this.node = node;
-        fillAttributes(node);
+    public void Load(OsmPrimitive tombPrimitive) {
+        this.tombPrimitive = tombPrimitive;
+        fillAttributes(tombPrimitive);
 
-        this.persons = loadPersons(node);
+        this.persons = loadPersons(tombPrimitive);
         this.personsRemoved = new HashSet<Relation>();
 
         fillPersons(this.persons, this.personsRemoved);
@@ -191,11 +192,11 @@ public class TombDialogAction extends TombDialog {
         personsTable.getColumnModel().getColumn(2).setPreferredWidth(30);
     }
 
-    private List<PersonModel> loadPersons(Node node) {
+    private List<PersonModel> loadPersons(OsmPrimitive tombPrimitive) {
 
         List<PersonModel> ret = new ArrayList<PersonModel>();
 
-        List<OsmPrimitive> referrers = node.getReferrers();
+        List<OsmPrimitive> referrers = tombPrimitive.getReferrers();
 
         for (OsmPrimitive osmPrimitive : referrers) {
             if (osmPrimitive instanceof Relation
@@ -223,13 +224,13 @@ public class TombDialogAction extends TombDialog {
         return pm;
     }
 
-    private void fillAttributes(Node node) {
+    private void fillAttributes(OsmPrimitive tombPrimitive) {
 
-        this.cbTombType.setSelectedItem(node.get(KEY_TOMB));
-        this.cbReligion.setSelectedItem(node.get(KEY_RELIGION));
+        this.cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
+        this.cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
 
-        this.txtWikipedia.setText(node.get(KEY_WIKIPEDIA));
-        this.txtImage.setText(node.get(KEY_IMAGE));
+        this.txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
+        this.txtImage.setText(tombPrimitive.get(KEY_IMAGE));
 
     }
 
@@ -270,9 +271,9 @@ public class TombDialogAction extends TombDialog {
 
         stopEdit();
 
-        savePersons(this.node, this.persons, this.personsRemoved);
+        savePersons(this.tombPrimitive, this.persons, this.personsRemoved);
 
-        saveNode(this.node);
+        saveTombPrimitive(this.tombPrimitive);
     }
 
     private void stopEdit() {
@@ -281,17 +282,25 @@ public class TombDialogAction extends TombDialog {
         }
     }
 
-    private void saveNode(Node node) {
+    private void saveTombPrimitive(OsmPrimitive tombPrimitive) {
 
-        Node newNode = new Node(node);
-        injectNode(newNode);
+        OsmPrimitive newPrimitive = null;
+        if (tombPrimitive instanceof Node) {
+            newPrimitive = new Node((Node) tombPrimitive);
+        } else if (tombPrimitive instanceof Way) {
+            newPrimitive = new Way((Way) tombPrimitive);
+        }
 
-        newNode.put("historic", KEY_TOMB);
+        injectTombPrimitive(newPrimitive);
 
-        Main.main.undoRedo.add(new ChangeCommand(node, newNode));
+        newPrimitive.put("historic", KEY_TOMB);
+
+        Main.main.undoRedo.add(new ChangeCommand(tombPrimitive, newPrimitive));
     }
 
-    private void injectNode(Node n) {
+
+
+    private void injectTombPrimitive(OsmPrimitive n) {
 
         n.put(KEY_TOMB, nullOnBlank((String) this.cbTombType.getSelectedItem()));
         n.put(KEY_RELIGION, nullOnBlank((String) this.cbReligion.getSelectedItem()));
@@ -313,22 +322,22 @@ public class TombDialogAction extends TombDialog {
     }
 
 
-    private void savePersons(Node node2, List<PersonModel> persons2, Set<Relation> personsRemoved) {
+    private void savePersons(OsmPrimitive tombPrimitive, List<PersonModel> persons2, Set<Relation> personsRemoved) {
 
         for (PersonModel pm : persons2) {
             if (pm.getRelation() != null) {
                 updateRelation(pm.getRelation(), pm);
             } else {
-                saveRelation(node2, pm);
+                saveRelation(tombPrimitive, pm);
             }
         }
 
         for (Relation relation : personsRemoved) {
-            removeRelation(node2, relation);
+            removeRelation(tombPrimitive, relation);
         }
     }
 
-    private void removeRelation(Node node, Relation relation) {
+    private void removeRelation(OsmPrimitive node, Relation relation) {
         //		if (relation.getMembersCount() < 2)
 
         //    	for (RelationMember m : relation.getMembers()) {
@@ -339,11 +348,11 @@ public class TombDialogAction extends TombDialog {
         Main.main.undoRedo.add(new DeleteCommand(relation));
     }
 
-    private void saveRelation(Node node, PersonModel pm) {
+    private void saveRelation(OsmPrimitive tombPrimitive, PersonModel pm) {
 
 
         Relation newRelation = new Relation();
-        newRelation.addMember(new RelationMember(KEY_TOMB, node));
+        newRelation.addMember(new RelationMember(KEY_TOMB, tombPrimitive));
 
         injectRelation(pm, newRelation);
 
