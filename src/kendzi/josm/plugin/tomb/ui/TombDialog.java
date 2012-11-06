@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -51,7 +50,8 @@ public class TombDialog extends JDialog {
     private JLabel lblTombData;
     private JLabel lblWikipediaArticle;
     private JLabel lblImage;
-    private JLabel lblTomb;
+    private JLabel lblHistoric;
+    private JComboBox cbHistoric;
 
     /**
      * Launch the application.
@@ -87,7 +87,7 @@ public class TombDialog extends JDialog {
                 panel_1.setLayout(new FormLayout(new ColumnSpec[] {
                         ColumnSpec.decode("100px"),
                         FormFactory.RELATED_GAP_COLSPEC,
-                        ColumnSpec.decode("220px"),
+                        ColumnSpec.decode("220px:grow"),
                         ColumnSpec.decode("30dlu"),
                         FormFactory.DEFAULT_COLSPEC,
                         FormFactory.RELATED_GAP_COLSPEC,
@@ -101,8 +101,15 @@ public class TombDialog extends JDialog {
                         FormFactory.RELATED_GAP_ROWSPEC,
                         RowSpec.decode("12dlu"),}));
                 {
-                    lblTomb = new JLabel("Tomb");
-                    panel_1.add(lblTomb, "1, 1");
+                    lblHistoric = new JLabel("Historic kind");
+                    lblHistoric.setFont(new Font("Tahoma", Font.BOLD, 11));
+                    panel_1.add(lblHistoric, "1, 1, left, default");
+                }
+                {
+                    cbHistoric = new JComboBox();
+                    cbHistoric.setModel(new DefaultComboBoxModel(new String[] {"", "tomb", "memorial"}));
+                    cbHistoric.setEditable(true);
+                    panel_1.add(cbHistoric, "3, 1, fill, default");
                 }
                 {
                     lblTombData = new JLabel("Tomb data");
@@ -258,10 +265,13 @@ public class TombDialog extends JDialog {
     public JLabel getLblImage() {
         return lblImage;
     }
-    public JLabel getLblTomb() {
-        return lblTomb;
+    public JLabel getLblHistoric() {
+        return lblHistoric;
     }
     public JComboBox getCbTombType() {
         return cbTombType;
+    }
+    public JComboBox getCbHistoric() {
+        return cbHistoric;
     }
 }

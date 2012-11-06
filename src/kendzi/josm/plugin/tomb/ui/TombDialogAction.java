@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 import javax.swing.table.TableCellEditor;
 
 import kendzi.josm.plugin.tomb.dto.PersonModel;
+import kendzi.josm.plugin.tomb.util.StringUtil;
 
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.command.AddCommand;
@@ -62,7 +63,9 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_IMAGE = "image";
     private static final String KEY_WIKIPEDIA = "wikipedia";
     private static final String KEY_RELIGION = "religion";
+    private static final String KEY_HISTORIC = "historic";
     private static final String KEY_TOMB = "tomb";
+    private static final String VALUE_TOMB = "tomb";
 
 
     private List<PersonModel> persons;
@@ -86,11 +89,18 @@ public class TombDialogAction extends TombDialog {
 
         setupTombTypeCombo();
 
+        setupHistoricCombo();
+
     }
 
     private void setupTombTypeCombo() {
 
         IconListRenderer ilr = new IconListRenderer() {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
             @Override
             public ImageIcon loadImage(String key) {
                 try {
@@ -113,6 +123,39 @@ public class TombDialogAction extends TombDialog {
 
 
         getCbTombType().setRenderer(ilr);
+        AutoCompletingTextField tf = new AutoCompletingTextField();
+
+        getCbTombType().setEditor(tf);
+
+    }
+    private void setupHistoricCombo() {
+
+        IconListRenderer ilr = new IconListRenderer() {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public ImageIcon loadImage(String key) {
+                try {
+                    return ImageProvider.get("historic_"+key+".png");
+                } catch (Exception e) {
+                    //
+                }
+                return null;
+
+            };
+
+            @Override
+            public String tr(String str) {
+                return I18n.tr(str);
+            }
+        };
+
+        getCbHistoric().setEditable(true);
+
+        getCbHistoric().setRenderer(ilr);
         AutoCompletingTextField tf = new AutoCompletingTextField();
 
         getCbTombType().setEditor(tf);
@@ -226,6 +269,9 @@ public class TombDialogAction extends TombDialog {
 
     private void fillAttributes(OsmPrimitive tombPrimitive) {
 
+        String historic = defaultValue(tombPrimitive.get(KEY_HISTORIC), VALUE_TOMB);
+
+        this.getCbHistoric().setSelectedItem(historic);
         this.cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
         this.cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
 
@@ -293,7 +339,7 @@ public class TombDialogAction extends TombDialog {
 
         injectTombPrimitive(newPrimitive);
 
-        newPrimitive.put("historic", KEY_TOMB);
+        //        newPrimitive.put("historic", KEY_TOMB);
 
         Main.main.undoRedo.add(new ChangeCommand(tombPrimitive, newPrimitive));
     }
@@ -302,11 +348,20 @@ public class TombDialogAction extends TombDialog {
 
     private void injectTombPrimitive(OsmPrimitive n) {
 
+        n.put(KEY_HISTORIC, defaultValue((String) this.getCbHistoric().getSelectedItem(), VALUE_TOMB));
+
         n.put(KEY_TOMB, nullOnBlank((String) this.cbTombType.getSelectedItem()));
         n.put(KEY_RELIGION, nullOnBlank((String) this.cbReligion.getSelectedItem()));
 
         n.put(KEY_WIKIPEDIA, nullOnBlank(this.txtWikipedia.getText()));
         n.put(KEY_IMAGE, nullOnBlank(this.txtImage.getText()));
+    }
+
+    private String defaultValue(String str, String defaultValue) {
+        if (StringUtil.isBlankOrNull(str)) {
+            return defaultValue;
+        }
+        return str;
     }
 
     private String nullOnBlank(String str) {
@@ -393,7 +448,8 @@ public class TombDialogAction extends TombDialog {
 
     public void localize() {
         try {
-            getLblTomb().setText(tr("Tomb"));
+            //XXX
+            getLblHistoric().setText(tr("Historic kind"));
             getLblTombType().setText(tr("Tomb type"));
             //getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
             getLblReligion().setText(tr("Religion"));
