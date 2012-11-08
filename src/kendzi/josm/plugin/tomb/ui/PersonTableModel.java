@@ -163,7 +163,7 @@ public class PersonTableModel extends AbstractTableModel {
         fireTableCellUpdated(row, col);
     }
 
-    public int addPersonModel(PersonModel personModel) {
+    public synchronized int addPersonModel(PersonModel personModel) {
 
         this.data.add(personModel);
 
@@ -175,7 +175,7 @@ public class PersonTableModel extends AbstractTableModel {
         return rowId;
     }
 
-    public PersonModel removePersonModel(int[] rowsId) {
+    public synchronized PersonModel removePersonModel(int[] rowsId) {
         if (rowsId.length == 0) {
             return null;
         }

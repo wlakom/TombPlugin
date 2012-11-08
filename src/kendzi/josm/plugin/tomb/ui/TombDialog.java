@@ -52,6 +52,7 @@ public class TombDialog extends JDialog {
     private JLabel lblImage;
     private JLabel lblHistoric;
     private JComboBox cbHistoric;
+    private JButton btnSearch;
 
     /**
      * Launch the application.
@@ -206,6 +207,15 @@ public class TombDialog extends JDialog {
                     });
                     panel_tableButtons.add(btnRemove);
                 }
+                {
+                    btnSearch = new JButton("Search");
+                    btnSearch.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            onSearch();
+                        }
+                    });
+                    panel_tableButtons.add(btnSearch);
+                }
             }
         }
         {
@@ -246,6 +256,10 @@ public class TombDialog extends JDialog {
     }
 
     protected void onRemovePerson(int [] rowsId) {
+        //
+    }
+
+    protected void onSearch() {
         //
     }
 

@@ -25,6 +25,8 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -34,14 +36,19 @@ import kendzi.josm.plugin.tomb.dto.PersonModel;
 import kendzi.josm.plugin.tomb.util.StringUtil;
 
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.actions.DownloadPrimitiveAction;
 import org.openstreetmap.josm.command.AddCommand;
 import org.openstreetmap.josm.command.ChangeCommand;
 import org.openstreetmap.josm.command.DeleteCommand;
 import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.data.osm.OsmPrimitiveType;
+import org.openstreetmap.josm.data.osm.PrimitiveId;
 import org.openstreetmap.josm.data.osm.Relation;
 import org.openstreetmap.josm.data.osm.RelationMember;
+import org.openstreetmap.josm.data.osm.SimplePrimitiveId;
 import org.openstreetmap.josm.data.osm.Way;
+import org.openstreetmap.josm.gui.layer.OsmDataLayer;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletingTextField;
 import org.openstreetmap.josm.tools.I18n;
 import org.openstreetmap.josm.tools.ImageProvider;
@@ -381,7 +388,7 @@ public class TombDialogAction extends TombDialog {
 
         for (PersonModel pm : persons2) {
             if (pm.getRelation() != null) {
-                updateRelation(pm.getRelation(), pm);
+                updateRelation(pm.getRelation(), tombPrimitive, pm);
             } else {
                 saveRelation(tombPrimitive, pm);
             }
@@ -417,10 +424,25 @@ public class TombDialogAction extends TombDialog {
 
     }
 
-    private void updateRelation(Relation relation,
-            PersonModel pm) {
+    private void updateRelation(Relation relation, OsmPrimitive tombPrimitive, PersonModel pm) {
         Relation newRelation = new Relation(relation);
         //        Main.main.undoRedo.add(new AddCommand(w));
+
+        boolean relationHaveThisTomb = false;
+        for (int i = 0; i < relation.getMembersCount(); i++ ) {
+            RelationMember member = relation.getMember(i);
+            if ("tomb".equals(member.getRole()) &&
+                    member.getMember().equals(tombPrimitive)) {
+                // skip
+                relationHaveThisTomb = true;
+            } else {
+                //
+            }
+        }
+        if (!relationHaveThisTomb) {
+
+            newRelation.addMember(new RelationMember(KEY_TOMB, tombPrimitive));
+        }
 
         injectRelation(pm, newRelation);
 
@@ -459,6 +481,117 @@ public class TombDialogAction extends TombDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onSearch() {
+        try {
+            PersonSearchDialogAction dialog = new PersonSearchDialogAction();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModal(true);
+            dialog.setVisible(true);
+
+            Long relationId = dialog.getSelectedRelationId();
+            if (relationId == null) {
+                return;
+            }
+
+            SimplePrimitiveId primitiveId = new SimplePrimitiveId(relationId, OsmPrimitiveType.RELATION);
+
+            List<PrimitiveId> ids = new ArrayList<PrimitiveId>();
+            ids.add(primitiveId);
+
+            DownloadPrimitiveAction.processItems(false, ids, false, true);
+
+            submitAddTableRowAfterDownload(primitiveId);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(null,
+                    tr("Error"+ e),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
+    private void submitAddTableRowAfterDownload(final SimplePrimitiveId primitiveId) {
+
+
+
+
+        Runnable showErrorsAndWarnings = new Runnable() {
+            @Override
+            public void run() {
+
+                OsmDataLayer layer = Main.main.getEditLayer();
+                Relation relation = (Relation) layer.data.getPrimitiveById(primitiveId);
+
+                PersonModel pm = convert(relation);
+                personTableModel.addPersonModel(pm);
+
+
+
+
+                //                Set<PrimitiveId> errs = task.getMissingPrimitives();
+                //                if (errs != null && !errs.isEmpty()) {
+                //                    final ExtendedDialog dlg = reportProblemDialog(errs,
+                //                            trn("Object could not be downloaded", "Some objects could not be downloaded", errs.size()),
+                //                            trn("One object could not be downloaded.<br>",
+                //                                "{0} objects could not be downloaded.<br>",
+                //                                errs.size(),
+                //                                errs.size())
+                //                            + tr("The server replied with response code 404.<br>"
+                //                                + "This usually means, the server does not know an object with the requested id."),
+                //                            tr("missing objects:"),
+                //                            JOptionPane.ERROR_MESSAGE
+                //                    );
+                //                    try {
+                //                        SwingUtilities.invokeAndWait(new Runnable() {
+                //                            @Override
+                //                            public void run() {
+                //                                dlg.showDialog();
+                //                            }
+                //                        });
+                //                    } catch (InterruptedException ex) {
+                //                    } catch (InvocationTargetException ex) {
+                //                    }
+                //                }
+                //
+                //                Set<PrimitiveId> del = new TreeSet<PrimitiveId>();
+                //                DataSet ds = getCurrentDataSet();
+                //                for (PrimitiveId id : ids) {
+                //                    OsmPrimitive osm = ds.getPrimitiveById(id);
+                //                    if (osm != null && osm.isDeleted()) {
+                //                        del.add(id);
+                //                    }
+                //                }
+                //                if (!del.isEmpty()) {
+                //                    final ExtendedDialog dlg = reportProblemDialog(del,
+                //                            trn("Object deleted", "Objects deleted", del.size()),
+                //                            trn(
+                //                                "One downloaded object is deleted.",
+                //                                "{0} downloaded objects are deleted.",
+                //                                del.size(),
+                //                                del.size()),
+                //                            null,
+                //                            JOptionPane.WARNING_MESSAGE
+                //                    );
+                //                    SwingUtilities.invokeLater(new Runnable() {
+                //                        @Override
+                //                        public void run() {
+                //                            dlg.showDialog();
+                //                        }
+                //                    });
+                //                }
+            }
+        };
+        Main.worker.submit(showErrorsAndWarnings);
+
     }
 
 }

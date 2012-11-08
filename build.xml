@@ -71,11 +71,13 @@
          <classpath>
 			<pathelement location="${josm}"/>
          	
-         	<!--
+         	
 			<fileset dir="lib">
-				<include name="**/*.jar"/>
+				<!-- <include name="**/*.jar"/> -->
+				<include name="**/httpclient-4.0.jar"/>
+				<include name="**/httpcore-4.0.1.jar"/>
 			</fileset>
-			-->		
+					
 		</classpath>
         </javac>
     </target>
@@ -101,9 +103,12 @@
                 <include name="LICENSE" />
             </fileset>
         </copy>
-    
-    <!--	<unzip src="lib/forms-1.3.0.jar"  dest="${plugin.build.dir}/" /> -->
+
     	
+     <unzip src="lib/httpclient-4.0.jar"  dest="${plugin.build.dir}/" />
+     <unzip src="lib/httpcore-4.0.1.jar"  dest="${plugin.build.dir}/" />
+    	
+    	 
      <echo>{version.entry.commit.date}: ${version.entry.commit.date}</echo>
      <echo>{version.entry.commit.revision}: ${version.entry.commit.revision}</echo>
      <echo>{build.number}: ${build.number}</echo>
