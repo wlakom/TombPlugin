@@ -23,7 +23,7 @@ import kendzi.josm.plugin.tomb.util.DateService;
  * 
  * @author Tomasz Kędziora (Kendzi)
  */
-public class PersonTableModel extends AbstractTableModel {
+public class TombDialogPersonTableModel extends AbstractTableModel {
 
     /**
      * 
@@ -44,7 +44,7 @@ public class PersonTableModel extends AbstractTableModel {
 
     private List<PersonModel> data = new ArrayList<PersonModel>();
 
-    public PersonTableModel(List<PersonModel> persons) {
+    public TombDialogPersonTableModel(List<PersonModel> persons) {
         this.data = persons;
     }
 
@@ -80,9 +80,9 @@ public class PersonTableModel extends AbstractTableModel {
         case 0:
             return pm.getName();
         case 1:
-            return this.dateService.dateToVisible(pm.getBirth());
+            return this.dateService.dateToVisible(pm.getBorn());
         case 2:
-            return this.dateService.dateToVisible(pm.getDeath());
+            return this.dateService.dateToVisible(pm.getDied());
         case 3:
             return pm.getWikipedia();
         case 4:
@@ -138,10 +138,10 @@ public class PersonTableModel extends AbstractTableModel {
             pm.setName((String) value);
             break;
         case 1:
-            pm.setBirth(this.dateService.dateToIso((String) value));
+            pm.setBorn(this.dateService.dateToIso((String) value));
             break;
         case 2:
-            pm.setDeath(this.dateService.dateToIso((String) value));
+            pm.setDied(this.dateService.dateToIso((String) value));
             break;
         case 3:
             pm.setWikipedia((String) value);

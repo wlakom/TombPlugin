@@ -30,13 +30,18 @@ public class OverpassService {
                 + " <print from=\"_\" limit=\"\" mode=\"meta\" order=\"id\"/>"
                 + " </osm-script>";
 
-        String xml = findQuery(q);
+        String xml = (new OverpassService()).findQuery(q);
 
 
         System.out.println(xml);
 
     }
-    static String findQuery(String query) {
+
+    public String findQuery(String query) {
+        return findQuery(query, "UTF-8");
+    }
+
+    public String findQuery(String query, String encoding) {
 
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(OVERPASS_URL);
@@ -51,7 +56,7 @@ public class OverpassService {
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
             HttpResponse response = client.execute(post);
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), encoding));
             String line = "";
             while ((line = rd.readLine()) != null) {
                 System.out.println(line);
@@ -60,8 +65,7 @@ public class OverpassService {
             return sb.toString();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("error findQuery", e);
         }
-        return null;
     }
 }

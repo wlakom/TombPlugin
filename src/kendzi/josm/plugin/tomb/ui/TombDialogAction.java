@@ -62,8 +62,8 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_FROM_FAMILY = "family_name";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_DEATH = "died";
-    private static final String KEY_BIRTH = "born";
+    private static final String KEY_DIED = "died";
+    private static final String KEY_BORN = "born";
     private static final String KEY_NAME = "name";
     private static final String KEY_PERSON = "person";
     private static final String KEY_TYPE = "type";
@@ -79,7 +79,7 @@ public class TombDialogAction extends TombDialog {
     private Set<Relation> personsRemoved;
 
     private OsmPrimitive tombPrimitive;
-    private PersonTableModel personTableModel;
+    private TombDialogPersonTableModel personTableModel;
 
 
     public TombDialogAction() {
@@ -229,7 +229,7 @@ public class TombDialogAction extends TombDialog {
 
     private void fillPersons(List<PersonModel> persons, Set<Relation> personsRemoved) {
 
-        this.personTableModel = new PersonTableModel(persons) {
+        this.personTableModel = new TombDialogPersonTableModel(persons) {
             @Override
             public String tr(String str) {
                 return I18n.tr(str);
@@ -263,8 +263,8 @@ public class TombDialogAction extends TombDialog {
     private PersonModel convert(Relation osmPrimitive) {
         PersonModel pm = new PersonModel();
         pm.setName(osmPrimitive.get(KEY_NAME));
-        pm.setBirth(osmPrimitive.get(KEY_BIRTH));
-        pm.setDeath(osmPrimitive.get(KEY_DEATH));
+        pm.setBorn(osmPrimitive.get(KEY_BORN));
+        pm.setDied(osmPrimitive.get(KEY_DIED));
         pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
         pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
@@ -459,8 +459,8 @@ public class TombDialogAction extends TombDialog {
      */
     public void injectRelation(PersonModel pm, Relation newRelation) {
         newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
-        newRelation.put(KEY_BIRTH, nullOnBlank(pm.getBirth()));
-        newRelation.put(KEY_DEATH, nullOnBlank(pm.getDeath()));
+        newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
+        newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));
         newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
         newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));
 

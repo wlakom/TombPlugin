@@ -24,10 +24,10 @@ public class Person {
     String wikipedia;
 
     //			birth=YYYY-MM-DD
-    String birth;
+    String born;
 
     //			death=YYYY-MM-DD
-    String death;
+    String died;
 
     //			description - luzny opis, np. grupy zawodowej
     String description;
@@ -64,33 +64,7 @@ public class Person {
         this.wikipedia = wikipedia;
     }
 
-    /**
-     * @return the birth
-     */
-    public String getBirth() {
-        return this.birth;
-    }
 
-    /**
-     * @param birth the birth to set
-     */
-    public void setBirth(String birth) {
-        this.birth = birth;
-    }
-
-    /**
-     * @return the death
-     */
-    public String getDeath() {
-        return this.death;
-    }
-
-    /**
-     * @param death the death to set
-     */
-    public void setDeath(String death) {
-        this.death = death;
-    }
 
     /**
      * @return the description
@@ -132,6 +106,34 @@ public class Person {
      */
     public void setFromFamily(String fromFamily) {
         this.fromFamily = fromFamily;
+    }
+
+    /**
+     * @return the born
+     */
+    public String getBorn() {
+        return born;
+    }
+
+    /**
+     * @param born the born to set
+     */
+    public void setBorn(String born) {
+        this.born = born;
+    }
+
+    /**
+     * @return the died
+     */
+    public String getDied() {
+        return died;
+    }
+
+    /**
+     * @param died the died to set
+     */
+    public void setDied(String died) {
+        this.died = died;
     }
 
 

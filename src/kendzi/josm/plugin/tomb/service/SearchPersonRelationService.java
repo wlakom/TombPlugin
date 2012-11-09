@@ -1,26 +1,16 @@
 package kendzi.josm.plugin.tomb.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import kendzi.josm.plugin.tomb.dto.PersonSearchDto;
+import kendzi.josm.plugin.tomb.util.XmlUtli;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class SearchPersonRelationService {
 
@@ -31,32 +21,47 @@ public class SearchPersonRelationService {
         try {
             String query = createQuery(name);
 
-            String findResult = overpassService.findQuery(query);
+            String findResult = this.overpassService.findQuery(query);
 
             List<PersonSearchDto> ret = new ArrayList<PersonSearchDto>();
 
+            Document doc = null;
+            try {
+                doc = XmlUtli.createDoc(findResult);
+            } catch (Exception e) {
+                throw new Exception("error parsing xml: \n" + findResult, e);
+            }
 
-            Document doc = createDoc(findResult);
+            XPathExpression expr = XmlUtli.createXpath("//osm/relation");
 
-            XPathExpression expr = createXpath("//osm/relation");
+            XPathExpression nameX = XmlUtli.createXpath("tag[@k='name']/@v");
+            XPathExpression lived_inX = XmlUtli.createXpath("tag[@k='lived_in']/@v");
+            XPathExpression bornX = XmlUtli.createXpath("tag[@k='born']/@v");
+            XPathExpression diedX = XmlUtli.createXpath("tag[@k='died']/@v");
 
-            XPathExpression nameX = createXpath("tag[@k='name']/@v");
+            XPathExpression wikipediaX = XmlUtli.createXpath("tag[@k='wikipedia']/@v");
+            XPathExpression descriptionX = XmlUtli.createXpath("tag[@k='description']/@v");
+            XPathExpression familyNameX = XmlUtli.createXpath("tag[@k='family_name']/@v");
 
-            NodeList nodes = findNodes(doc, expr);
+            NodeList nodes = XmlUtli.findNodes(doc, expr);
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element node = (Element) nodes.item(i);
 
                 String idValue = node.getAttribute("id");
-                String nameValue = findString(node, nameX);
-
-
-                System.out.println(idValue);
-                System.out.println(nameValue);
-
                 PersonSearchDto p = new PersonSearchDto();
+
                 p.setId(Long.parseLong(idValue));
-                p.setName(nameValue);
+
+                p.setName(XmlUtli.findString(node, nameX));
+
+                p.setLivedIn(XmlUtli.findString(node, lived_inX));
+                p.setBorn(XmlUtli.findString(node, bornX));
+                p.setDied(XmlUtli.findString(node, diedX));
+
+                p.setWikipedia(XmlUtli.findString(node, wikipediaX));
+                p.setDescription(XmlUtli.findString(node, descriptionX));
+                p.setFamilyName(XmlUtli.findString(node, familyNameX));
 
                 ret.add(p);
             }
@@ -68,67 +73,33 @@ public class SearchPersonRelationService {
         }
     }
 
-    private String createQuery(String name) {
+    private String createQuery(String name) throws Exception {
         //[Cc]zernik
-        // FIXME TODO XXX unescape name!!!
-        return "<osm-script>"
-        + " <query into=\"_\" type=\"relation\">"
-        + " <has-kv k=\"type\" v=\"person\" />"
-        + " <has-kv k=\"name\" regv=\"" + name + "\" />"
-        + " </query>"
-        + " <print from=\"_\" limit=\"\" mode=\"meta\" order=\"id\"/>"
-        + " </osm-script>";
+
+        String query =
+                "<osm-script>"
+                        + " <query into=\"_\" type=\"relation\">"
+                        + "   <has-kv k=\"type\" v=\"person\" />"
+                        + "   <has-kv k=\"name\" regv=\"\" />"
+                        + " </query>"
+                        + " <print from=\"_\" limit=\"100\" mode=\"meta\" order=\"id\"/>"
+                        + " </osm-script>";
+        //        " + name + "\
+
+        Document doc = XmlUtli.createDoc(query);
+
+        //        XPathExpression regv = XmlUtli.createXpath("//osm-script/query/has-kv[@k='name']/@regv");
+        XPathExpression queryE = XmlUtli.createXpath("//osm-script/query/has-kv[@k='name']");
+
+        Element element = XmlUtli.findElement(doc, queryE);
+
+        element.setAttribute("regv", name);
+
+        return XmlUtli.format(doc);
+
     }
 
 
-
-    private static String findString(Node node, XPathExpression name) throws XPathExpressionException {
-        return (String) name.evaluate(node, XPathConstants.STRING);
-    }
-
-    /**
-     * @param doc
-     * @param expr
-     * @return
-     * @throws XPathExpressionException
-     */
-    public static NodeList findNodes(Document doc, XPathExpression expr)
-            throws XPathExpressionException {
-        Object evaluate = expr.evaluate(doc, XPathConstants.NODESET);
-        NodeList nodes = (NodeList) evaluate;
-        return nodes;
-    }
-    /**
-     * @param xpathExp
-     * @return
-     * @throws XPathExpressionException
-     */
-    public static XPathExpression createXpath(String xpathExp)
-            throws XPathExpressionException {
-        XPathFactory xFactory = XPathFactory.newInstance();
-        XPath xPath = xFactory.newXPath();
-
-        XPathExpression expr = xPath.compile(xpathExp);
-        return expr;
-    }
-    /**
-     * @param xml
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
-     */
-    public static Document createDoc(String xml)
-            throws ParserConfigurationException, SAXException, IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(xml.getBytes());
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(in);
-        return doc;
-    }
 
 
 }

@@ -1,29 +1,63 @@
 package kendzi.josm.plugin.tomb.ui;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 import kendzi.josm.plugin.tomb.dto.PersonSearchDto;
 import kendzi.josm.plugin.tomb.service.SearchPersonRelationService;
 
 import org.openstreetmap.josm.tools.I18n;
+import org.openstreetmap.josm.tools.ImageProvider;
 
 public class PersonSearchDialogAction extends PersonSearchDialog {
 
     SearchPersonRelationService searchPersonRelationService = new SearchPersonRelationService();
-    private PersonSearchTableModel personTableModel = new PersonSearchTableModel(new ArrayList<PersonSearchDto>());
+    private PersonSearchTableModel personTableModel;
     private Long relationId;
 
     public PersonSearchDialogAction() {
-        getTable().setModel(personTableModel);
+
+        setupPersonTable(new PersonSearchTableModel(new ArrayList<PersonSearchDto>()));
+
+        loadIcon();
+    }
+
+
+    /**
+     * @param personSearchTableModel
+     */
+    public void setupPersonTable(PersonSearchTableModel personSearchTableModel) {
+
+        this.personTableModel = personSearchTableModel;
+
+        getTable().setModel(this.personTableModel);
         getTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        getTable().getColumnModel().getColumn(1).setPreferredWidth(30);
+        getTable().getColumnModel().getColumn(2).setPreferredWidth(30);
+    }
+
+    /**
+     * 
+     */
+    private void loadIcon() {
+
+        ImageIcon imageIcon = ImageProvider.get("cc2/person_search_icon.png");
+
+        if (imageIcon != null) {
+            setIconImage(imageIcon.getImage());
+        }
     }
 
     public Long getSelectedRelationId() {
-        return relationId;
+        return this.relationId;
     }
 
     @Override
@@ -37,22 +71,19 @@ public class PersonSearchDialogAction extends PersonSearchDialog {
 
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    tr("Search error") + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-
-
-
     }
 
     @Override
     protected void doOk(int[] rowId) {
-        //        if (validate(rowId)) {
-        //            relationId =
-        //        }
+
         if (rowId.length == 1) {
-            Long relationId = personTableModel.relationIdForRow(rowId[0]);
+            Long relationId = this.personTableModel.relationIdForRow(rowId[0]);
 
             if (relationId != null) {
                 this.relationId = relationId;
@@ -61,13 +92,16 @@ public class PersonSearchDialogAction extends PersonSearchDialog {
             }
         }
 
-        // XXX message
+        JOptionPane.showMessageDialog(null,
+                tr("Select one row"),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
 
     }
 
     private void fillPersonsTable(List<PersonSearchDto> persons) {
 
-        personTableModel = new PersonSearchTableModel(persons) {
+        PersonSearchTableModel personSearchTableModel = new PersonSearchTableModel(persons) {
             /**
              * 
              */
@@ -79,10 +113,9 @@ public class PersonSearchDialogAction extends PersonSearchDialog {
             }
         };
 
-        this.getTable().setModel(personTableModel);
+        this.getTable().setModel(personSearchTableModel);
 
-        //        personsTable.getColumnModel().getColumn(1).setPreferredWidth(30);
-        //        personsTable.getColumnModel().getColumn(2).setPreferredWidth(30);
+        setupPersonTable(personSearchTableModel);
     }
 
 

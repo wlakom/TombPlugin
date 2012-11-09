@@ -38,7 +38,7 @@ public class PersonSearchDialog extends JDialog {
      * Create the dialog.
      */
     public PersonSearchDialog() {
-        setBounds(100, 100, 450, 300);
+        setBounds(100, 100, 1024, 400);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -106,6 +106,11 @@ public class PersonSearchDialog extends JDialog {
             }
             {
                 JButton cancelButton = new JButton("Cancel");
+                cancelButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                    }
+                });
                 cancelButton.setActionCommand("Cancel");
                 buttonPane.add(cancelButton);
             }

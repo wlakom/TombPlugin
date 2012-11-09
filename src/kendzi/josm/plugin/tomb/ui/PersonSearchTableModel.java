@@ -75,16 +75,16 @@ public class PersonSearchTableModel extends AbstractTableModel {
         switch (col) {
         case 0:
             return pm.getName();
-            //        case 1:
-            //            return this.dateService.dateToVisible(pm.getBirth());
-            //        case 2:
-            //            return this.dateService.dateToVisible(pm.getDeath());
+        case 1:
+            return this.dateService.dateToVisible(pm.getBorn());
+        case 2:
+            return this.dateService.dateToVisible(pm.getDied());
             //        case 3:
-            //            return pm.getWikipedia();
+                //            return pm.getWikipedia();
             //        case 4:
             //            return pm.getDescription();
-            //        case 5:
-            //            return pm.getLivedIn();
+        case 5:
+            return pm.getLivedIn();
             //        case 6:
             //            return pm.getFromFamily();
 
