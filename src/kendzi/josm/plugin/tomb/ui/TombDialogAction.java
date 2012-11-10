@@ -39,7 +39,6 @@ import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.DownloadPrimitiveAction;
 import org.openstreetmap.josm.command.AddCommand;
 import org.openstreetmap.josm.command.ChangeCommand;
-import org.openstreetmap.josm.command.DeleteCommand;
 import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.data.osm.OsmPrimitiveType;
@@ -59,6 +58,8 @@ import org.openstreetmap.josm.tools.ImageProvider;
  */
 public class TombDialogAction extends TombDialog {
 
+    private static final String ROLE_MEMORIAL = "memorial";
+    private static final String ROLE_TOMB = "tomb";
     private static final String KEY_FROM_FAMILY = "family_name";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
@@ -71,8 +72,8 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_WIKIPEDIA = "wikipedia";
     private static final String KEY_RELIGION = "religion";
     private static final String KEY_HISTORIC = "historic";
-    private static final String KEY_TOMB = "tomb";
-    private static final String VALUE_TOMB = "tomb";
+    private static final String KEY_TOMB = ROLE_TOMB;
+    private static final String VALUE_TOMB = ROLE_TOMB;
 
 
     private List<PersonModel> persons;
@@ -402,12 +403,32 @@ public class TombDialogAction extends TombDialog {
     private void removeRelation(OsmPrimitive node, Relation relation) {
         //		if (relation.getMembersCount() < 2)
 
-        //    	for (RelationMember m : relation.getMembers()) {
-        //    		m.getNode()
-        //
-        //    	}
+        Relation newRelation = new Relation(relation);
 
-        Main.main.undoRedo.add(new DeleteCommand(relation));
+        boolean changed = false;
+
+        for (int i = newRelation.getMembersCount() - 1; i >= 0 ; i--) {
+
+            RelationMember m = newRelation.getMember(i);
+
+            if (m.getType().equals(node.getType())
+                    && m.getUniqueId() == node.getUniqueId()
+                    && (ROLE_TOMB.equals(m.getRole()) || ROLE_MEMORIAL.equals(m.getRole()))) {
+
+                newRelation.removeMember(i);
+                changed = true;
+
+                //                Main.main.undoRedo.add(new DeleteCommand(m));
+
+
+            }
+
+        }
+        if (changed) {
+            Main.main.undoRedo.add(new ChangeCommand(relation, newRelation));
+        }
+
+        //        Main.main.undoRedo.add(new DeleteCommand(relation));
     }
 
     private void saveRelation(OsmPrimitive tombPrimitive, PersonModel pm) {
@@ -431,7 +452,7 @@ public class TombDialogAction extends TombDialog {
         boolean relationHaveThisTomb = false;
         for (int i = 0; i < relation.getMembersCount(); i++ ) {
             RelationMember member = relation.getMember(i);
-            if ("tomb".equals(member.getRole()) &&
+            if (ROLE_TOMB.equals(member.getRole()) &&
                     member.getMember().equals(tombPrimitive)) {
                 // skip
                 relationHaveThisTomb = true;
