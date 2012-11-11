@@ -1,5 +1,7 @@
 package kendzi.josm.plugin.tomb.service;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,13 +11,18 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.preferences.server.ProxyPreferencesPanel;
+import org.openstreetmap.josm.gui.preferences.server.ProxyPreferencesPanel.ProxyPolicy;
 import org.xml.sax.SAXException;
 
 public class OverpassService {
@@ -43,14 +50,21 @@ public class OverpassService {
 
     public String findQuery(String query, String encoding) {
 
+        //http://hc.apache.org/httpcomponents-client-ga/httpclient/examples/org/apache/http/examples/client/ClientExecuteProxy.java
+        HttpHost httpProxy = getHttpProxy();
+
         HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost(OVERPASS_URL);
 
         StringBuffer sb = new StringBuffer();
         try {
+
+            if (httpProxy != null) {
+                client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, httpProxy);
+            }
+            HttpPost post = new HttpPost(OVERPASS_URL);
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("data",
-                    query));
+            nameValuePairs.add(new BasicNameValuePair("data", query));
 
 
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -67,5 +81,83 @@ public class OverpassService {
         } catch (IOException e) {
             throw new RuntimeException("error findQuery", e);
         }
+    }
+
+    private HttpHost getHttpProxy() {
+
+
+        //        ProxySelector selector = ProxySelector.getDefault();
+        //        if (selector instanceof DefaultProxySelector) {
+        //            DefaultProxySelector p = ((DefaultProxySelector)selector);//.initFromPreferences();
+        //            p.
+        //        }
+
+        ProxyPolicy proxyPolicy = ProxyPolicy.NO_PROXY;
+
+        String value = Main.pref.get(ProxyPreferencesPanel.PROXY_POLICY);
+
+        if (value.length() == 0) {
+            proxyPolicy = ProxyPolicy.NO_PROXY;
+        } else {
+            proxyPolicy= ProxyPolicy.fromName(value);
+            if (proxyPolicy == null) {
+                System.err.println(tr("Warning: unexpected value for preference ''{0}'' found. Got ''{1}''. Will use no proxy.", ProxyPreferencesPanel.PROXY_POLICY, value));
+                proxyPolicy = ProxyPolicy.NO_PROXY;
+            }
+        }
+
+        if (!ProxyPolicy.USE_HTTP_PROXY.equals(proxyPolicy)) {
+            return null;
+        }
+
+        String host = Main.pref.get(ProxyPreferencesPanel.PROXY_HTTP_HOST, null);
+        int port = parseProxyPortValue(ProxyPreferencesPanel.PROXY_HTTP_PORT, Main.pref.get(ProxyPreferencesPanel.PROXY_HTTP_PORT, null));
+        if (host != null && ! host.trim().equals("") && port > 0) {
+
+            return new HttpHost(host, port, "http");
+
+        } else {
+            System.err.println(tr("Warning: Unexpected parameters for HTTP proxy. Got host ''{0}'' and port ''{1}''.", host, port));
+            System.err.println(tr("The proxy will not be used."));
+        }
+        return null;
+
+
+
+
+
+
+
+        //        CredentialsAgent cm = CredentialsManager.getInstance();
+        //        try {
+        //            PasswordAuthentication pa = new PasswordAuthentication(
+        //                    tfProxyHttpUser.getText().trim(),
+        //                    tfProxyHttpPassword.getPassword()
+        //                    );
+        //            cm.store(RequestorType.PROXY, tfProxyHttpHost.getText(), pa);
+        //        } catch(CredentialsAgentException e) {
+        //            e.printStackTrace();
+        //        }
+        //        return null;
+    }
+
+    protected int parseProxyPortValue(String property, String value) {
+        if (value == null) {
+            return 0;
+        }
+        int port = 0;
+        try {
+            port = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            System.err.println(tr("Unexpected format for port number in in preference ''{0}''. Got ''{1}''.", property, value));
+            System.err.println(tr("The proxy will not be used."));
+            return 0;
+        }
+        if (port <= 0 || port >  65535) {
+            System.err.println(tr("Illegal port number in preference ''{0}''. Got {1}.", property, port));
+            System.err.println(tr("The proxy will not be used."));
+            return 0;
+        }
+        return port;
     }
 }
