@@ -198,6 +198,7 @@ public class TombDialog extends JDialog {
                 }
                 {
                     JButton btnRemove = new JButton("Remove");
+                    btnRemove.setToolTipText("Remove person from tomb");
                     btnRemove.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
 
@@ -209,6 +210,7 @@ public class TombDialog extends JDialog {
                 }
                 {
                     btnSearch = new JButton("Search");
+                    btnSearch.setToolTipText("Search person in OSM database");
                     btnSearch.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             onSearch();
