@@ -52,8 +52,13 @@ public class PersonSearchDialog extends JDialog {
             }
             {
                 txtName = new JTextField();
-                txtName.setText("Kowalski");
-                txtName.setToolTipText("Type name (case sensitive)");
+                txtName.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        doSearch();
+                    }
+                });
+                txtName.setText("Jan");
+                txtName.setToolTipText("Type name (case insensitive)");
                 panel.add(txtName);
                 txtName.setColumns(10);
             }
