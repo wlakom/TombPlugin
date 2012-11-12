@@ -103,7 +103,7 @@ public class TombDialog extends JDialog {
                         RowSpec.decode("12dlu"),}));
                 {
                     lblHistoric = new JLabel("Historic kind");
-                    lblHistoric.setFont(new Font("Tahoma", Font.BOLD, 11));
+                    lblHistoric.setFont(lblHistoric.getFont().deriveFont(lblHistoric.getFont().getStyle() | Font.BOLD));
                     panel_1.add(lblHistoric, "1, 1, left, default");
                 }
                 {
@@ -118,13 +118,13 @@ public class TombDialog extends JDialog {
                 }
                 {
                     lblTombType = new JLabel("Tomb type");
-                    lblTombType.setFont(new Font("Tahoma", Font.BOLD, 11));
+                    lblTombType.setFont(lblTombType.getFont().deriveFont(lblTombType.getFont().getStyle() | Font.BOLD));
                     panel_1.add(lblTombType, "1, 3, left, default");
                 }
                 {
                     cbTombType = new JComboBox();
                     cbTombType.setEditable(true);
-                    cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "sarcophagus", "vault", "crypt"}));
+                    cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "sarcophagus", "vault"}));
                     panel_1.add(cbTombType, "3, 3, fill, default");
                 }
                 {
@@ -168,8 +168,13 @@ public class TombDialog extends JDialog {
                 panel.add(scrollPane);
                 {
                     personsTable = new JTable();
+                    //                    personsTable.setRowHeight(17);
                     //                    personsTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
                     //                    personsTable.setRowHeight(20);
+
+                    //                    personsTable.getFont().get
+                    int fontHeight = personsTable.getFontMetrics(personsTable.getFont()).getHeight();
+                    personsTable.setRowHeight(fontHeight + 2);
 
                     personsTable.setModel(new DefaultTableModel(
                             new Object[][] {
