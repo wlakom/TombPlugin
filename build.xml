@@ -107,6 +107,7 @@
     	
      <unzip src="lib/httpclient-4.0.jar"  dest="${plugin.build.dir}/" />
      <unzip src="lib/httpcore-4.0.1.jar"  dest="${plugin.build.dir}/" />
+     <unzip src="lib/commons-logging-1.1.1.jar"  dest="${plugin.build.dir}/" />
     	
     	 
      <echo>{version.entry.commit.date}: ${version.entry.commit.date}</echo>
