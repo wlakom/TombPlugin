@@ -19,7 +19,10 @@ public class SearchPersonRelationService {
     public List<PersonSearchDto> findPerson(String name) throws Exception {
 
         try {
-            String query = createQuery(name);
+
+            String nameRegexp =  caseInsensitive(name);
+
+            String query = createQuery(nameRegexp);
 
             String findResult = this.overpassService.findQuery(query);
 
@@ -71,6 +74,31 @@ public class SearchPersonRelationService {
         } catch (Exception e) {
             throw new Exception("error findPerson", e);
         }
+    }
+
+    /**
+     * simple overround for case insensitive
+     * @param str
+     * @return
+     */
+    private String caseInsensitive(String str) {
+
+        if (str == null) {
+            return null;
+        }
+
+        str = str.trim();
+
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < str.length(); i++) {
+            String z = str.substring(i, i + 1);
+            sb.append("[");
+            sb.append(z.toUpperCase());
+            sb.append(z.toLowerCase());
+            sb.append("]");
+        }
+        return sb.toString();
     }
 
     private String createQuery(String name) throws Exception {
