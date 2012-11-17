@@ -491,14 +491,17 @@ public class TombDialogAction extends TombDialog {
 
     public void localize() {
         try {
-            //XXX
-            getLblHistoric().setText(tr("Historic kind"));
-            getLblTombType().setText(tr("Tomb type"));
+
+            getLblHistoric().setText(tr(getLblHistoric().getText()));
+            getLblTombType().setText(tr(getLblTombType().getText()));
             //getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
-            getLblReligion().setText(tr("Religion"));
-            getLblTombData().setText(tr("Tomb data"));
+            getLblReligion().setText(tr(getLblReligion().getText()));
+            getLblTombData().setText(tr(getLblTombData().getText()));
+
+            // XXX i don't known if it is corect translation for strange names: (with "-")
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
             getLblImage().setText("- " + tr("image"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
