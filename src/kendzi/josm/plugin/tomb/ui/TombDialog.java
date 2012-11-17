@@ -34,6 +34,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 /**
+ * File generated using WindowsBuilder, DON'T edit it manually!
  *
  * @author Tomasz Kędziora (Kendzi)
  */
