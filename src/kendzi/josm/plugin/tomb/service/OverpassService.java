@@ -76,7 +76,7 @@ public class OverpassService {
             nameValuePairs.add(new BasicNameValuePair("data", query));
 
 
-            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            post.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
             HttpResponse response = client.execute(post);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), encoding));
