@@ -74,6 +74,7 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_HISTORIC = "historic";
     private static final String KEY_TOMB = ROLE_TOMB;
     private static final String VALUE_TOMB = ROLE_TOMB;
+    private static final String VALUE_MEMORIAL = ROLE_MEMORIAL;
 
 
     private List<PersonModel> persons;
@@ -431,11 +432,41 @@ public class TombDialogAction extends TombDialog {
         //        Main.main.undoRedo.add(new DeleteCommand(relation));
     }
 
+    /**
+     * Returns role for 'person' relation for given OSM primitive of tomb.
+     * <p/>
+     * I.e. usually tombs (historic=tomb) should be added to 'person' relation as role 'tomb', memorials
+     * (<code>historic=memorial</code>) as role 'memorial'. It guesses role for OSM primitive representing memorial/tomb. Currently
+     * returns 'memorial' for <code>historic=memorial</code> and 'tomb' for all other cases.
+     *
+     * @param tombPrimitive OSM primitive (usually node) representing this tomb/memorial
+     * @return String to be used as role in <code>type=person</code> relation
+     */
+    private String getRoleForTombPrimitive(OsmPrimitive tombPrimitive) {
+        final String historicValue = tombPrimitive.get(KEY_HISTORIC);
+        if (VALUE_MEMORIAL.equals(historicValue)) {
+            return ROLE_MEMORIAL;
+        } else {
+            return ROLE_TOMB;
+        }
+    }
+
+    /**
+     * Returns true if relation member represents given OSM primitive of tomb.
+     *
+     * @param member Relation member to check
+     * @param tombPrimitive Tomb primitive (usually node) to check
+     */
+    private boolean isMemberRepresentsThisPrimitive(RelationMember member, OsmPrimitive tombPrimitive) {
+        return (ROLE_TOMB.equals(member.getRole()) || ROLE_MEMORIAL.equals(member.getRole())) &&
+                member.getMember().equals(tombPrimitive);
+    }
+
     private void saveRelation(OsmPrimitive tombPrimitive, PersonModel pm) {
 
 
         Relation newRelation = new Relation();
-        newRelation.addMember(new RelationMember(KEY_TOMB, tombPrimitive));
+        newRelation.addMember(new RelationMember(getRoleForTombPrimitive(tombPrimitive), tombPrimitive));
 
         injectRelation(pm, newRelation);
 
@@ -452,8 +483,7 @@ public class TombDialogAction extends TombDialog {
         boolean relationHaveThisTomb = false;
         for (int i = 0; i < relation.getMembersCount(); i++ ) {
             RelationMember member = relation.getMember(i);
-            if (ROLE_TOMB.equals(member.getRole()) &&
-                    member.getMember().equals(tombPrimitive)) {
+            if (isMemberRepresentsThisPrimitive(member, tombPrimitive)) {
                 // skip
                 relationHaveThisTomb = true;
             } else {
@@ -462,7 +492,7 @@ public class TombDialogAction extends TombDialog {
         }
         if (!relationHaveThisTomb) {
 
-            newRelation.addMember(new RelationMember(KEY_TOMB, tombPrimitive));
+            newRelation.addMember(new RelationMember(getRoleForTombPrimitive(tombPrimitive), tombPrimitive));
         }
 
         injectRelation(pm, newRelation);
