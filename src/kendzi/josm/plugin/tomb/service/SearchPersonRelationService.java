@@ -28,10 +28,7 @@ public class SearchPersonRelationService {
     public List<PersonSearchDto> findPerson(String name) throws Exception {
 
         try {
-
-            String nameRegexp =  caseInsensitive(name);
-
-            String query = createQuery(nameRegexp);
+            String query = createQuery(name);
 
             String findResult = this.overpassService.findQuery(query);
 
@@ -85,31 +82,6 @@ public class SearchPersonRelationService {
         }
     }
 
-    /**
-     * simple overround for case insensitive
-     * @param str
-     * @return
-     */
-    private String caseInsensitive(String str) {
-
-        if (str == null) {
-            return null;
-        }
-
-        str = str.trim();
-
-        StringBuffer sb = new StringBuffer();
-
-        for (int i = 0; i < str.length(); i++) {
-            String z = str.substring(i, i + 1);
-            sb.append("[");
-            sb.append(z.toUpperCase());
-            sb.append(z.toLowerCase());
-            sb.append("]");
-        }
-        return sb.toString();
-    }
-
     private String createQuery(String name) throws Exception {
         //[Cc]zernik
 
@@ -117,7 +89,7 @@ public class SearchPersonRelationService {
                 "<osm-script>"
                         + " <query into=\"_\" type=\"relation\">"
                         + "   <has-kv k=\"type\" v=\"person\" />"
-                        + "   <has-kv k=\"name\" regv=\"\" />"
+                        + "   <has-kv case=\"ignore\" k=\"name\" regv=\"\" />"
                         + " </query>"
                         + " <print from=\"_\" limit=\"100\" mode=\"meta\" order=\"id\"/>"
                         + " </osm-script>";
