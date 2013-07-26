@@ -24,6 +24,6 @@ import org.openstreetmap.josm.plugins.PluginInformation;
 public class TombPlugin extends Plugin {
     public TombPlugin(PluginInformation info) {
         super(info);
-        MainMenu.add(Main.main.menu.toolsMenu, new TombAction());
+        MainMenu.add(Main.main.menu.dataMenu, new TombAction());
     }
 }

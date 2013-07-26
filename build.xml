@@ -30,7 +30,7 @@
 <project name="TombPlugin" default="dist" basedir=".">
 
     <property name="commit.message" value="Commit message" />
-    <property name="plugin.main.version" value="3835" />
+    <property name="plugin.main.version" value="6082" />
 
 
 	<!-- stupid egit does not know how to use workspace... -->
