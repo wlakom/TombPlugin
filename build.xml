@@ -41,7 +41,7 @@
     <property name="plugin.build.dir" value="build"/>
     <property name="plugin.src.dir" value="src"/>
 <!-- this is the directory where the plugin jar is copied to -->
-    <property name="ant.build.javac.target" value="1.6"/>
+    <property name="ant.build.javac.target" value="1.7"/>
 
     <property name="plugin.jar" value="${plugin.dist.dir}/${ant.project.name}.jar"/>
 
@@ -65,17 +65,17 @@
 -->
     <target name="compile" depends="init">
         <echo message="compiling sources for ${plugin.jar} ... "/>
-        <javac source="1.6" target="1.6"  srcdir="src" classpath="${josm}" debug="true" destdir="${plugin.build.dir}">
+        <javac source="1.7" target="1.7"  srcdir="src" classpath="${josm}" debug="true" destdir="${plugin.build.dir}" includeantruntime="false">
             <compilerarg value="-Xlint:deprecation"/>
             <compilerarg value="-Xlint:unchecked"/>
          <classpath>
 			<pathelement location="${josm}"/>
+			<pathelement location="${plugin.dist.dir}/apache-commons.jar"/>
+  			<pathelement location="${plugin.dist.dir}/apache-http.jar"/>
          	
          	
 			<fileset dir="lib">
 				<!-- <include name="**/*.jar"/> -->
-				<include name="**/httpclient-4.0.jar"/>
-				<include name="**/httpcore-4.0.1.jar"/>
 			</fileset>
 					
 		</classpath>
@@ -133,9 +133,9 @@
                 <attribute name="Plugin-Description" value="Simple plugin for taging tombs"/>
                 <attribute name="Plugin-Icon" value="images/tomb_icon.png"/>
                 <attribute name="Plugin-Link" value="http://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin"/>
-               
-             <attribute name="Plugin-Mainversion" value="${plugin.main.version}"/>
-             <attribute name="Plugin-Version" value="${version.entry.commit.revision}"/>
+                <attribute name="Plugin-Mainversion" value="${plugin.main.version}"/>
+                <attribute name="Plugin-Version" value="${version.entry.commit.revision}"/>
+                <attribute name="Plugin-Requires" value="apache-commons;apache-http"/>
             </manifest>
         </jar>
      <copy tofile="${plugin.dist.dir}/${ant.project.name}_v${version.entry.commit.revision}.jar" file="${plugin.jar}" />
