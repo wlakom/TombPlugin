@@ -33,8 +33,8 @@
     <property name="plugin.main.version" value="6082" />
 
 
-	<!-- stupid egit does not know how to use workspace... -->
-    <property name="plugin.dist.dir" value="c:/java/workspace/sun/JOSM/dist"/>
+	<!-- put here real JOSM project location -->
+    <property name="plugin.dist.dir" value="/home/kendzi/java/workspace/JOSM/dist"/>
   <!--  <property name="plugin.dist.dir" value="../JOSM/dist"/> -->
     <property name="josm" location="${plugin.dist.dir}/josm-custom.jar"/>
 	
@@ -104,12 +104,6 @@
             </fileset>
         </copy>
 
-    	
-     <unzip src="lib/httpclient-4.0.jar"  dest="${plugin.build.dir}/" />
-     <unzip src="lib/httpcore-4.0.1.jar"  dest="${plugin.build.dir}/" />
-     <unzip src="lib/commons-logging-1.1.1.jar"  dest="${plugin.build.dir}/" />
-    	
-    	 
      <echo>{version.entry.commit.date}: ${version.entry.commit.date}</echo>
      <echo>{version.entry.commit.revision}: ${version.entry.commit.revision}</echo>
      <echo>{build.number}: ${build.number}</echo>
