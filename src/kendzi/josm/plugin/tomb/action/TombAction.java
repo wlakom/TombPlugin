@@ -46,7 +46,7 @@ public class TombAction extends JosmAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Collection<OsmPrimitive> selectedPrimitive = Main.main.getCurrentDataSet().getSelectedNodesAndWays();
+        Collection<OsmPrimitive> selectedPrimitive = Main.getLayerManager().getEditDataSet().getSelectedNodesAndWays();
 
         if (selectedPrimitive.size() != 1) {
             JOptionPane.showMessageDialog(null,
@@ -80,6 +80,6 @@ public class TombAction extends JosmAction {
 
     @Override
     protected void updateEnabledState() {
-        setEnabled(getCurrentDataSet() != null);
+        setEnabled(getLayerManager().getEditDataSet() != null);
     }
 }

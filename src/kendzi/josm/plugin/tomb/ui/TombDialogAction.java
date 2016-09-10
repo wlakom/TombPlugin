@@ -582,7 +582,7 @@ public class TombDialogAction extends TombDialog {
             @Override
             public void run() {
 
-                OsmDataLayer layer = Main.main.getEditLayer();
+                OsmDataLayer layer = Main.getLayerManager().getEditLayer();
                 Relation relation = (Relation) layer.data.getPrimitiveById(primitiveId);
 
                 PersonModel pm = convert(relation);
