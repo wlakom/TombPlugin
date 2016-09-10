@@ -15,7 +15,7 @@ import java.util.List;
 import javax.xml.xpath.XPathExpression;
 
 import kendzi.josm.plugin.tomb.dto.PersonSearchDto;
-import kendzi.josm.plugin.tomb.util.XmlUtli;
+import kendzi.josm.plugin.tomb.util.XmlUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,23 +36,23 @@ public class SearchPersonRelationService {
 
             Document doc = null;
             try {
-                doc = XmlUtli.createDoc(findResult);
+                doc = XmlUtil.createDoc(findResult);
             } catch (Exception e) {
                 throw new Exception("error parsing xml: \n" + findResult, e);
             }
 
-            XPathExpression expr = XmlUtli.createXpath("//osm/relation");
+            XPathExpression expr = XmlUtil.createXpath("//osm/relation");
 
-            XPathExpression nameX = XmlUtli.createXpath("tag[@k='name']/@v");
-            XPathExpression lived_inX = XmlUtli.createXpath("tag[@k='lived_in']/@v");
-            XPathExpression bornX = XmlUtli.createXpath("tag[@k='born']/@v");
-            XPathExpression diedX = XmlUtli.createXpath("tag[@k='died']/@v");
+            XPathExpression nameX = XmlUtil.createXpath("tag[@k='name']/@v");
+            XPathExpression lived_inX = XmlUtil.createXpath("tag[@k='lived_in']/@v");
+            XPathExpression bornX = XmlUtil.createXpath("tag[@k='born']/@v");
+            XPathExpression diedX = XmlUtil.createXpath("tag[@k='died']/@v");
 
-            XPathExpression wikipediaX = XmlUtli.createXpath("tag[@k='wikipedia']/@v");
-            XPathExpression descriptionX = XmlUtli.createXpath("tag[@k='description']/@v");
-            XPathExpression familyNameX = XmlUtli.createXpath("tag[@k='family_name']/@v");
+            XPathExpression wikipediaX = XmlUtil.createXpath("tag[@k='wikipedia']/@v");
+            XPathExpression descriptionX = XmlUtil.createXpath("tag[@k='description']/@v");
+            XPathExpression familyNameX = XmlUtil.createXpath("tag[@k='family_name']/@v");
 
-            NodeList nodes = XmlUtli.findNodes(doc, expr);
+            NodeList nodes = XmlUtil.findNodes(doc, expr);
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element node = (Element) nodes.item(i);
@@ -62,15 +62,15 @@ public class SearchPersonRelationService {
 
                 p.setId(Long.parseLong(idValue));
 
-                p.setName(XmlUtli.findString(node, nameX));
+                p.setName(XmlUtil.findString(node, nameX));
 
-                p.setLivedIn(XmlUtli.findString(node, lived_inX));
-                p.setBorn(XmlUtli.findString(node, bornX));
-                p.setDied(XmlUtli.findString(node, diedX));
+                p.setLivedIn(XmlUtil.findString(node, lived_inX));
+                p.setBorn(XmlUtil.findString(node, bornX));
+                p.setDied(XmlUtil.findString(node, diedX));
 
-                p.setWikipedia(XmlUtli.findString(node, wikipediaX));
-                p.setDescription(XmlUtli.findString(node, descriptionX));
-                p.setFamilyName(XmlUtli.findString(node, familyNameX));
+                p.setWikipedia(XmlUtil.findString(node, wikipediaX));
+                p.setDescription(XmlUtil.findString(node, descriptionX));
+                p.setFamilyName(XmlUtil.findString(node, familyNameX));
 
                 ret.add(p);
             }
@@ -95,16 +95,16 @@ public class SearchPersonRelationService {
                         + " </osm-script>";
         //        " + name + "\
 
-        Document doc = XmlUtli.createDoc(query);
+        Document doc = XmlUtil.createDoc(query);
 
         //        XPathExpression regv = XmlUtli.createXpath("//osm-script/query/has-kv[@k='name']/@regv");
-        XPathExpression queryE = XmlUtli.createXpath("//osm-script/query/has-kv[@k='name']");
+        XPathExpression queryE = XmlUtil.createXpath("//osm-script/query/has-kv[@k='name']");
 
-        Element element = XmlUtli.findElement(doc, queryE);
+        Element element = XmlUtil.findElement(doc, queryE);
 
         element.setAttribute("regv", name);
 
-        return XmlUtli.format(doc);
+        return XmlUtil.format(doc);
 
     }
 
