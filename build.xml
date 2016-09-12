@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-** This is a template build file for a JOSM plugin.
-**
-** Maintaining versions
-** ====================
-** see README.template
-**
-** Usage
-** =====
-** To build it run
-**
-** > ant dist
-**
-** To install the generated plugin locally (in you default plugin directory) run
-**
-** > ant install
-**
-** The generated plugin jar is not automatically available in JOSMs plugin configuration
-** dialog. You have to check it in first.
-**
-** Use the ant target 'publish' to check in the plugin and make it available to other
-** JOSM users:
-** set the properties commit.message and plugin.main.version
-** and run
-** > ant publish
-**
-**
--->
 <project name="TombPlugin" default="dist" basedir=".">
 
     <property name="commit.message" value="Commit message" />
-    <property name="plugin.main.version" value="6082" />
+    <property name="plugin.main.version" value="10580" />
 
 
 	<!-- put here real JOSM project location -->
@@ -39,9 +11,9 @@
     <property name="josm" location="${plugin.dist.dir}/josm-custom.jar"/>
 	
     <property name="plugin.build.dir" value="build"/>
+    <property name="plugin.lib.dir" value="lib"/>
     <property name="plugin.src.dir" value="src"/>
-<!-- this is the directory where the plugin jar is copied to -->
-    <property name="ant.build.javac.target" value="1.7"/>
+    <property name="ant.build.javac.target" value="1.8"/>
 
     <property name="plugin.jar" value="${plugin.dist.dir}/${ant.project.name}.jar"/>
 
@@ -65,7 +37,7 @@
 -->
     <target name="compile" depends="init">
         <echo message="compiling sources for ${plugin.jar} ... "/>
-        <javac source="1.7" target="1.7"  srcdir="src" classpath="${josm}" debug="true" destdir="${plugin.build.dir}" includeantruntime="false">
+        <javac source="1.8" target="1.8"  srcdir="src" classpath="${josm}" debug="true" destdir="${plugin.build.dir}" includeantruntime="false">
             <compilerarg value="-Xlint:deprecation"/>
             <compilerarg value="-Xlint:unchecked"/>
          <classpath>
@@ -73,11 +45,11 @@
 			<pathelement location="${plugin.dist.dir}/apache-commons.jar"/>
   			<pathelement location="${plugin.dist.dir}/apache-http.jar"/>
          	
-         	
-			<fileset dir="lib">
-				<!-- <include name="**/*.jar"/> -->
-			</fileset>
-					
+            <fileset dir="${plugin.lib.dir}">
+                <include name="**/*.jar"/>
+                <exclude name="**/*-sources.jar"/>
+                <exclude name="**/*-javadoc.jar"/>
+            </fileset>
 		</classpath>
         </javac>
     </target>
@@ -112,14 +84,6 @@
      <echo>{plugin.build.dir}: ${plugin.build.dir}</echo>
         
         <jar destfile="${plugin.jar}" basedir="${plugin.build.dir}">
-            <!--
-************************************************
-** configure these properties. Most of them will be copied to the plugins
-** manifest file. Property values will also show up in the list available
-** plugins: http://josm.openstreetmap.de/wiki/Plugins.
-**
-************************************************
--->
             <manifest>
                 <attribute name="Author" value="Kendzi"/>
                 <attribute name="Plugin-Class" value="kendzi.josm.plugin.tomb.TombPlugin"/>
@@ -131,6 +95,13 @@
                 <attribute name="Plugin-Version" value="${version.entry.commit.revision}"/>
                 <attribute name="Plugin-Requires" value="apache-commons;apache-http"/>
             </manifest>
+            <restrict>
+                <archives>
+                    <zips>
+                        <fileset dir="${plugin.lib.dir}" includes="*.jar" excludes="*-sources.jar, *-javadoc.jar" erroronmissingdir="no"/>
+                    </zips>
+                </archives>
+            </restrict>
         </jar>
      <copy tofile="${plugin.dist.dir}/${ant.project.name}_v${version.entry.commit.revision}.jar" file="${plugin.jar}" />
     </target>

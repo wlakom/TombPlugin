@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
-public class XmlUtli {
+public class XmlUtil {
 
 
     public static String findString(Node node, XPathExpression name) throws XPathExpressionException {
