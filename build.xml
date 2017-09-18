@@ -2,7 +2,7 @@
 <project name="TombPlugin" default="dist" basedir=".">
 
     <property name="commit.message" value="Commit message" />
-    <property name="plugin.main.version" value="10580" />
+    <property name="plugin.main.version" value="12805" />
 
 
 	<!-- put here real JOSM project location -->

@@ -30,8 +30,8 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.openstreetmap.josm.Main;
-import org.openstreetmap.josm.gui.preferences.server.ProxyPreferencesPanel;
-import org.openstreetmap.josm.gui.preferences.server.ProxyPreferencesPanel.ProxyPolicy;
+import org.openstreetmap.josm.io.DefaultProxySelector;
+import org.openstreetmap.josm.io.ProxyPolicy;
 import org.xml.sax.SAXException;
 
 public class OverpassService {
@@ -103,14 +103,14 @@ public class OverpassService {
 
         ProxyPolicy proxyPolicy = ProxyPolicy.NO_PROXY;
 
-        String value = Main.pref.get(ProxyPreferencesPanel.PROXY_POLICY);
+        String value = Main.pref.get(DefaultProxySelector.PROXY_POLICY);
 
         if (value.length() == 0) {
             proxyPolicy = ProxyPolicy.NO_PROXY;
         } else {
             proxyPolicy= ProxyPolicy.fromName(value);
             if (proxyPolicy == null) {
-                System.err.println(tr("Warning: unexpected value for preference ''{0}'' found. Got ''{1}''. Will use no proxy.", ProxyPreferencesPanel.PROXY_POLICY, value));
+                System.err.println(tr("Warning: unexpected value for preference ''{0}'' found. Got ''{1}''. Will use no proxy.", DefaultProxySelector.PROXY_POLICY, value));
                 proxyPolicy = ProxyPolicy.NO_PROXY;
             }
         }
@@ -119,8 +119,8 @@ public class OverpassService {
             return null;
         }
 
-        String host = Main.pref.get(ProxyPreferencesPanel.PROXY_HTTP_HOST, null);
-        int port = parseProxyPortValue(ProxyPreferencesPanel.PROXY_HTTP_PORT, Main.pref.get(ProxyPreferencesPanel.PROXY_HTTP_PORT, null));
+        String host = Main.pref.get(DefaultProxySelector.PROXY_HTTP_HOST, null);
+        int port = parseProxyPortValue(DefaultProxySelector.PROXY_HTTP_PORT, Main.pref.get(DefaultProxySelector.PROXY_HTTP_PORT, null));
         if (host != null && ! host.trim().equals("") && port > 0) {
 
             return new HttpHost(host, port, "http");
