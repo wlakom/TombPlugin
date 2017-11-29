@@ -12,6 +12,7 @@ package kendzi.josm.plugin.tomb;
 import kendzi.josm.plugin.tomb.action.TombAction;
 
 import org.openstreetmap.josm.Main;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
@@ -24,6 +25,6 @@ import org.openstreetmap.josm.plugins.PluginInformation;
 public class TombPlugin extends Plugin {
     public TombPlugin(PluginInformation info) {
         super(info);
-        MainMenu.add(Main.main.menu.dataMenu, new TombAction());
+        MainMenu.add(MainApplication.getMenu().dataMenu, new TombAction());
     }
 }

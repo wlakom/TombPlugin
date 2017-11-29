@@ -23,6 +23,7 @@ import kendzi.josm.plugin.tomb.ui.TombDialogAction;
 import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
+import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.tools.Shortcut;
 
 public class TombAction extends JosmAction {
@@ -46,7 +47,7 @@ public class TombAction extends JosmAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Collection<OsmPrimitive> selectedPrimitive = Main.getLayerManager().getEditDataSet().getSelectedNodesAndWays();
+        Collection<OsmPrimitive> selectedPrimitive = MainApplication.getLayerManager().getEditDataSet().getSelectedNodesAndWays();
 
         if (selectedPrimitive.size() != 1) {
             JOptionPane.showMessageDialog(null,
