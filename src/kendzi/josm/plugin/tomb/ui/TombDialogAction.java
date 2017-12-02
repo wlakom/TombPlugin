@@ -647,7 +647,7 @@ public class TombDialogAction extends TombDialog {
                 //                }
             }
         };
-        Main.worker.submit(showErrorsAndWarnings);
+        MainApplication.worker.submit(showErrorsAndWarnings);
 
     }
 
