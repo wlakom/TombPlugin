@@ -90,7 +90,7 @@
                 <attribute name="Plugin-Date" value="${version.entry.commit.date}"/>
                 <attribute name="Plugin-Description" value="Simple plugin for taging tombs"/>
                 <attribute name="Plugin-Icon" value="images/tomb_icon.png"/>
-                <attribute name="Plugin-Link" value="http://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin"/>
+                <attribute name="Plugin-Link" value="https://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin"/>
                 <attribute name="Plugin-Mainversion" value="${plugin.main.version}"/>
                 <attribute name="Plugin-Version" value="${version.entry.commit.revision}"/>
                 <attribute name="Plugin-Requires" value="apache-commons;apache-http"/>
