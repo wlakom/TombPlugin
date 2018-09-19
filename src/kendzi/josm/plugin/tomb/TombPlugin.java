@@ -9,13 +9,12 @@
 
 package kendzi.josm.plugin.tomb;
 
-import kendzi.josm.plugin.tomb.action.TombAction;
-
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.gui.MainMenu;
 import org.openstreetmap.josm.plugins.Plugin;
 import org.openstreetmap.josm.plugins.PluginInformation;
+
+import kendzi.josm.plugin.tomb.action.TombAction;
 
 
 /**

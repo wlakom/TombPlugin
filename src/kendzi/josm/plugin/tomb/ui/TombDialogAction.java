@@ -10,11 +10,12 @@
 package kendzi.josm.plugin.tomb.ui;
 
 
-import static org.openstreetmap.josm.tools.I18n.tr;
+import static org.openstreetmap.josm.tools.I18n.*;
 
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,20 +26,17 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 import javax.swing.table.TableCellEditor;
 
-import kendzi.josm.plugin.tomb.dto.PersonModel;
-import kendzi.josm.plugin.tomb.util.StringUtil;
-
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.DownloadPrimitiveAction;
 import org.openstreetmap.josm.command.AddCommand;
 import org.openstreetmap.josm.command.ChangeCommand;
+import org.openstreetmap.josm.data.UndoRedoHandler;
 import org.openstreetmap.josm.data.osm.DataSet;
 import org.openstreetmap.josm.data.osm.Node;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
@@ -53,6 +51,9 @@ import org.openstreetmap.josm.gui.layer.OsmDataLayer;
 import org.openstreetmap.josm.gui.tagging.ac.AutoCompletingTextField;
 import org.openstreetmap.josm.tools.I18n;
 import org.openstreetmap.josm.tools.ImageProvider;
+
+import kendzi.josm.plugin.tomb.dto.PersonModel;
+import kendzi.josm.plugin.tomb.util.StringUtil;
 
 /**
  *
@@ -130,8 +131,6 @@ public class TombDialogAction extends TombDialog {
         };
 
         getCbTombType().setEditable(true);
-        //        getCbTombType().setModel(new DefaultComboBoxModel(new String[] {"details", "computer", "folder", "computer"}));
-
 
         getCbTombType().setRenderer(ilr);
         AutoCompletingTextField tf = new AutoCompletingTextField();
@@ -174,13 +173,12 @@ public class TombDialogAction extends TombDialog {
     }
 
     private void cellRenderer() {
-
-        //        personsTable.setDefaultEditor(String.class,
-        //                new BigFontCellEditor());
+        //
     }
 
     public class BigFontCellEditor extends AbstractCellEditor implements TableCellEditor {
         JTextField component = new JTextField();
+        @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
             component.setText((String)value);
             component.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -207,9 +205,7 @@ public class TombDialogAction extends TombDialog {
      * 
      */
     public void bindHotKey() {
-        KeyStroke key1 = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
-
-        //        getRootPane().registerKeyboardAction(anAction, aKeyStroke, aCondition)
+        KeyStroke key1 = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK);
 
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(key1, "new_person");
         getRootPane().getActionMap().put("new_person", new AbstractAction() {
@@ -225,22 +221,22 @@ public class TombDialogAction extends TombDialog {
         this.tombPrimitive = tombPrimitive;
         fillAttributes(tombPrimitive);
 
-        this.persons = loadPersons(tombPrimitive);
-        this.personsRemoved = new HashSet<Relation>();
+        persons = loadPersons(tombPrimitive);
+        personsRemoved = new HashSet<Relation>();
 
-        fillPersons(this.persons, this.personsRemoved);
+        fillPersons(persons, personsRemoved);
     }
 
     private void fillPersons(List<PersonModel> persons, Set<Relation> personsRemoved) {
 
-        this.personTableModel = new TombDialogPersonTableModel(persons) {
+        personTableModel = new TombDialogPersonTableModel(persons) {
             @Override
             public String tr(String str) {
                 return I18n.tr(str);
             }
         };
 
-        this.personsTable.setModel(this.personTableModel);
+        personsTable.setModel(personTableModel);
 
         personsTable.getColumnModel().getColumn(1).setPreferredWidth(30);
         personsTable.getColumnModel().getColumn(2).setPreferredWidth(30);
@@ -282,12 +278,12 @@ public class TombDialogAction extends TombDialog {
 
         String historic = defaultValue(tombPrimitive.get(KEY_HISTORIC), VALUE_TOMB);
 
-        this.getCbHistoric().setSelectedItem(historic);
-        this.cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
-        this.cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
+        getCbHistoric().setSelectedItem(historic);
+        cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
+        cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
 
-        this.txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
-        this.txtImage.setText(tombPrimitive.get(KEY_IMAGE));
+        txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
+        txtImage.setText(tombPrimitive.get(KEY_IMAGE));
 
     }
 
@@ -304,23 +300,19 @@ public class TombDialogAction extends TombDialog {
 
         stopEdit();
 
-        int rowId = this.personTableModel.addPersonModel(new PersonModel());
+        int rowId = personTableModel.addPersonModel(new PersonModel());
 
-        //    	personsTable.setRowSelectionInterval(rowId, rowId);
-        this.personsTable.changeSelection(rowId, 0, false, false);
-        this.personsTable.requestFocus();
+        personsTable.changeSelection(rowId, 0, false, false);
+        personsTable.requestFocus();
 
-        //    	personsTable.setFocusable(true);
-        //    	persons.add(new PersonModel());
-        //    	fireTableRowsInserted()
     }
 
     @Override
     protected void onRemovePerson(int [] rowsId) {
-        PersonModel pm = this.personTableModel.removePersonModel(rowsId);
+        PersonModel pm = personTableModel.removePersonModel(rowsId);
 
         if (pm != null && pm.getRelation() != null) {
-            this.personsRemoved.add(pm.getRelation());
+            personsRemoved.add(pm.getRelation());
         }
     }
 
@@ -328,14 +320,14 @@ public class TombDialogAction extends TombDialog {
 
         stopEdit();
 
-        savePersons(this.tombPrimitive, this.persons, this.personsRemoved);
+        savePersons(tombPrimitive, persons, personsRemoved);
 
-        saveTombPrimitive(this.tombPrimitive);
+        saveTombPrimitive(tombPrimitive);
     }
 
     private void stopEdit() {
-        if (this.personsTable.isEditing()) {
-            this.personsTable.getCellEditor().stopCellEditing();
+        if (personsTable.isEditing()) {
+            personsTable.getCellEditor().stopCellEditing();
         }
     }
 
@@ -350,22 +342,20 @@ public class TombDialogAction extends TombDialog {
 
         injectTombPrimitive(newPrimitive);
 
-        //        newPrimitive.put("historic", KEY_TOMB);
-
-        Main.main.undoRedo.add(new ChangeCommand(tombPrimitive, newPrimitive));
+        UndoRedoHandler.getInstance().add(new ChangeCommand(tombPrimitive, newPrimitive));
     }
 
 
 
     private void injectTombPrimitive(OsmPrimitive n) {
 
-        n.put(KEY_HISTORIC, defaultValue((String) this.getCbHistoric().getSelectedItem(), VALUE_TOMB));
+        n.put(KEY_HISTORIC, defaultValue((String) getCbHistoric().getSelectedItem(), VALUE_TOMB));
 
-        n.put(KEY_TOMB, nullOnBlank((String) this.cbTombType.getSelectedItem()));
-        n.put(KEY_RELIGION, nullOnBlank((String) this.cbReligion.getSelectedItem()));
+        n.put(KEY_TOMB, nullOnBlank((String) cbTombType.getSelectedItem()));
+        n.put(KEY_RELIGION, nullOnBlank((String) cbReligion.getSelectedItem()));
 
-        n.put(KEY_WIKIPEDIA, nullOnBlank(this.txtWikipedia.getText()));
-        n.put(KEY_IMAGE, nullOnBlank(this.txtImage.getText()));
+        n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
+        n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
     }
 
     private String defaultValue(String str, String defaultValue) {
@@ -404,7 +394,6 @@ public class TombDialogAction extends TombDialog {
     }
 
     private void removeRelation(OsmPrimitive node, Relation relation) {
-        //		if (relation.getMembersCount() < 2)
 
         Relation newRelation = new Relation(relation);
 
@@ -420,18 +409,13 @@ public class TombDialogAction extends TombDialog {
 
                 newRelation.removeMember(i);
                 changed = true;
-
-                //                Main.main.undoRedo.add(new DeleteCommand(m));
-
-
             }
 
         }
         if (changed) {
-            Main.main.undoRedo.add(new ChangeCommand(relation, newRelation));
+            UndoRedoHandler.getInstance().add(new ChangeCommand(relation, newRelation));
         }
 
-        //        Main.main.undoRedo.add(new DeleteCommand(relation));
     }
 
     /**
@@ -475,13 +459,12 @@ public class TombDialogAction extends TombDialog {
         newRelation.put(KEY_TYPE, KEY_PERSON);
 
         DataSet ds = MainApplication.getLayerManager().getEditDataSet();
-        Main.main.undoRedo.add(new AddCommand(ds, newRelation));
+        UndoRedoHandler.getInstance().add(new AddCommand(ds, newRelation));
 
     }
 
     private void updateRelation(Relation relation, OsmPrimitive tombPrimitive, PersonModel pm) {
         Relation newRelation = new Relation(relation);
-        //        Main.main.undoRedo.add(new AddCommand(w));
 
         boolean relationHaveThisTomb = false;
         for (int i = 0; i < relation.getMembersCount(); i++ ) {
@@ -502,15 +485,11 @@ public class TombDialogAction extends TombDialog {
 
         newRelation.put(KEY_TYPE, KEY_PERSON);
 
-        Main.main.undoRedo.add(new ChangeCommand(relation, newRelation));
+        UndoRedoHandler.getInstance().add(new ChangeCommand(relation, newRelation));
 
 
     }
 
-    /**
-     * @param pm
-     * @param newRelation
-     */
     public void injectRelation(PersonModel pm, Relation newRelation) {
         newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
         newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
@@ -527,11 +506,10 @@ public class TombDialogAction extends TombDialog {
 
             getLblHistoric().setText(tr(getLblHistoric().getText()));
             getLblTombType().setText(tr(getLblTombType().getText()));
-            //getLblOptionalAttributes().setText(tr("Optional Attributes") + ":");
             getLblReligion().setText(tr(getLblReligion().getText()));
             getLblTombData().setText(tr(getLblTombData().getText()));
 
-            // XXX i don't known if it is corect translation for strange names: (with "-")
+            // XXX i don't known if it is correct translation for strange names: (with "-")
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
             getLblImage().setText("- " + tr("image"));
 
@@ -544,7 +522,7 @@ public class TombDialogAction extends TombDialog {
     protected void onSearch() {
         try {
             PersonSearchDialogAction dialog = new PersonSearchDialogAction();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             dialog.setModal(true);
             dialog.setVisible(true);
 
@@ -590,61 +568,6 @@ public class TombDialogAction extends TombDialog {
 
                 PersonModel pm = convert(relation);
                 personTableModel.addPersonModel(pm);
-
-
-
-
-                //                Set<PrimitiveId> errs = task.getMissingPrimitives();
-                //                if (errs != null && !errs.isEmpty()) {
-                //                    final ExtendedDialog dlg = reportProblemDialog(errs,
-                //                            trn("Object could not be downloaded", "Some objects could not be downloaded", errs.size()),
-                //                            trn("One object could not be downloaded.<br>",
-                //                                "{0} objects could not be downloaded.<br>",
-                //                                errs.size(),
-                //                                errs.size())
-                //                            + tr("The server replied with response code 404.<br>"
-                //                                + "This usually means, the server does not know an object with the requested id."),
-                //                            tr("missing objects:"),
-                //                            JOptionPane.ERROR_MESSAGE
-                //                    );
-                //                    try {
-                //                        SwingUtilities.invokeAndWait(new Runnable() {
-                //                            @Override
-                //                            public void run() {
-                //                                dlg.showDialog();
-                //                            }
-                //                        });
-                //                    } catch (InterruptedException ex) {
-                //                    } catch (InvocationTargetException ex) {
-                //                    }
-                //                }
-                //
-                //                Set<PrimitiveId> del = new TreeSet<PrimitiveId>();
-                //                DataSet ds = getCurrentDataSet();
-                //                for (PrimitiveId id : ids) {
-                //                    OsmPrimitive osm = ds.getPrimitiveById(id);
-                //                    if (osm != null && osm.isDeleted()) {
-                //                        del.add(id);
-                //                    }
-                //                }
-                //                if (!del.isEmpty()) {
-                //                    final ExtendedDialog dlg = reportProblemDialog(del,
-                //                            trn("Object deleted", "Objects deleted", del.size()),
-                //                            trn(
-                //                                "One downloaded object is deleted.",
-                //                                "{0} downloaded objects are deleted.",
-                //                                del.size(),
-                //                                del.size()),
-                //                            null,
-                //                            JOptionPane.WARNING_MESSAGE
-                //                    );
-                //                    SwingUtilities.invokeLater(new Runnable() {
-                //                        @Override
-                //                        public void run() {
-                //                            dlg.showDialog();
-                //                        }
-                //                    });
-                //                }
             }
         };
         MainApplication.worker.submit(showErrorsAndWarnings);

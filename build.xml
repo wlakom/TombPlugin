@@ -2,11 +2,11 @@
 <project name="TombPlugin" default="dist" basedir=".">
 
     <property name="commit.message" value="Commit message" />
-    <property name="plugin.main.version" value="13181" />
+    <property name="plugin.main.version" value="14260" />
 
 
 	<!-- put here real JOSM project location -->
-    <property name="plugin.dist.dir" value="/home/kendzi/osm/workspace/JOSM/dist"/>
+    <property name="plugin.dist.dir" value="/home/kendzi/java/workspace/JOSM/dist"/>
   <!--  <property name="plugin.dist.dir" value="../JOSM/dist"/> -->
     <property name="josm" location="${plugin.dist.dir}/josm-custom.jar"/>
 	

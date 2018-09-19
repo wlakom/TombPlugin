@@ -9,7 +9,7 @@
 
 package kendzi.josm.plugin.tomb.action;
 
-import static org.openstreetmap.josm.tools.I18n.tr;
+import static org.openstreetmap.josm.tools.I18n.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -18,13 +18,12 @@ import java.util.Collection;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import kendzi.josm.plugin.tomb.ui.TombDialogAction;
-
-import org.openstreetmap.josm.Main;
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.tools.Shortcut;
+
+import kendzi.josm.plugin.tomb.ui.TombDialogAction;
 
 public class TombAction extends JosmAction {
 
@@ -62,7 +61,7 @@ public class TombAction extends JosmAction {
 
         try {
             TombDialogAction dialog = new TombDialogAction();
-            //            TombDialog dialog = new TombDialog();
+            
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
             dialog.Load(tombPrimitive);

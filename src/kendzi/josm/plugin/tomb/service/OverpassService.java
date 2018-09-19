@@ -28,10 +28,10 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.openstreetmap.josm.Main;
+import org.apache.http.message.BasicNameValuePair; 
 import org.openstreetmap.josm.io.DefaultProxySelector;
 import org.openstreetmap.josm.io.ProxyPolicy;
+import org.openstreetmap.josm.spi.preferences.Config;
 import org.xml.sax.SAXException;
 
 public class OverpassService {
@@ -94,16 +94,9 @@ public class OverpassService {
 
     private HttpHost getHttpProxy() {
 
-
-        //        ProxySelector selector = ProxySelector.getDefault();
-        //        if (selector instanceof DefaultProxySelector) {
-        //            DefaultProxySelector p = ((DefaultProxySelector)selector);//.initFromPreferences();
-        //            p.
-        //        }
-
         ProxyPolicy proxyPolicy = ProxyPolicy.NO_PROXY;
 
-        String value = Main.pref.get(DefaultProxySelector.PROXY_POLICY);
+        String value = Config.getPref().get(DefaultProxySelector.PROXY_POLICY);
 
         if (value.length() == 0) {
             proxyPolicy = ProxyPolicy.NO_PROXY;
@@ -119,8 +112,8 @@ public class OverpassService {
             return null;
         }
 
-        String host = Main.pref.get(DefaultProxySelector.PROXY_HTTP_HOST, null);
-        int port = parseProxyPortValue(DefaultProxySelector.PROXY_HTTP_PORT, Main.pref.get(DefaultProxySelector.PROXY_HTTP_PORT, null));
+        String host = Config.getPref().get(DefaultProxySelector.PROXY_HTTP_HOST, null);
+        int port = parseProxyPortValue(DefaultProxySelector.PROXY_HTTP_PORT, Config.getPref().get(DefaultProxySelector.PROXY_HTTP_PORT, null));
         if (host != null && ! host.trim().equals("") && port > 0) {
 
             return new HttpHost(host, port, "http");
