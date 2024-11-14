@@ -37,9 +37,15 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             tr("Date of birth"),
             tr("Date of death"),
             tr("Wikipedia"),
+            tr("Wikidata"),
             tr("Description"),
             tr("Lived in"),
-            tr("Family name")
+            tr("Family name"),
+            tr("Birth place"),
+            tr("Death place"),
+            tr("Image"),
+            tr("Wikimedia_Commons"),
+            tr("Flickr"),
     };
 
     private List<PersonModel> data = new ArrayList<PersonModel>();
@@ -88,10 +94,13 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
         case 4:
             return pm.getDescription();
         case 5:
-            return pm.getLivedIn();
+            return pm.getLived_in();
         case 6:
-            return pm.getFromFamily();
-
+            return pm.getFamily_name();
+        case 7:
+            return pm.getBirthplace();
+        case 8:
+            return pm.getDeathplace();
         default:
             break;
         }
@@ -153,7 +162,13 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             pm.setLivedIn((String) value);
             break;
         case 6:
-            pm.setFromFamily((String) value);
+            pm.setFamily_name((String) value);
+            break;
+        case 7:
+            pm.setBirthplace((String) value);
+            break;
+        case 8:
+            pm.setDeathplace((String) value);
             break;
 
         default:
