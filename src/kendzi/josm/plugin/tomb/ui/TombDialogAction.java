@@ -63,17 +63,23 @@ public class TombDialogAction extends TombDialog {
 
     private static final String ROLE_MEMORIAL = "memorial";
     private static final String ROLE_TOMB = "tomb";
-    private static final String KEY_FROM_FAMILY = "family_name";
+    private static final String KEY_FAMILY_NAME = "family_name";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_DIED = "died";
+    private static final String KEY_DEATHPLACE = "deathplace";
     private static final String KEY_BORN = "born";
+    private static final String KEY_BIRTHPLACE = "birthplace";
     private static final String KEY_NAME = "name";
     private static final String KEY_PERSON = "person";
     private static final String KEY_TYPE = "type";
     private static final String KEY_IMAGE = "image";
+    private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
+    private static final String KEY_FRICKR = "frickr";
     private static final String KEY_WIKIPEDIA = "wikipedia";
+    private static final String KEY_WIKIDATA = "wikidata";
     private static final String KEY_RELIGION = "religion";
+    private static final String KEY_DENOMINATION = "denomination";
     private static final String KEY_HISTORIC = "historic";
     private static final String KEY_TOMB = ROLE_TOMB;
     private static final String VALUE_TOMB = ROLE_TOMB;
@@ -269,6 +275,8 @@ public class TombDialogAction extends TombDialog {
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
         pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
         pm.setFromFamily(osmPrimitive.get(KEY_FROM_FAMILY));
+        pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));
+        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));
 
         pm.setRelation(osmPrimitive);
         return pm;
@@ -281,9 +289,13 @@ public class TombDialogAction extends TombDialog {
         getCbHistoric().setSelectedItem(historic);
         cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
         cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
-
+        cbDenomination.setSelectedItem(tombPrimitive.get(KEY_DENOMINATION));
+        
         txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
+        txtWikidata.setText(tombPrimitive.get(KEY_WIKIDATA));
         txtImage.setText(tombPrimitive.get(KEY_IMAGE));
+        txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
+        txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
 
     }
 
@@ -353,9 +365,12 @@ public class TombDialogAction extends TombDialog {
 
         n.put(KEY_TOMB, nullOnBlank((String) cbTombType.getSelectedItem()));
         n.put(KEY_RELIGION, nullOnBlank((String) cbReligion.getSelectedItem()));
-
+        n.put(KEY_DENOMINATION, nullOnBlank((String) cbDenomination.getSelectedItem()));
         n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
+        n.put(KEY_WIKIDATA, nullOnBlank(txtWikidata.getText()));
         n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
+        n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
+        n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
     }
 
     private String defaultValue(String str, String defaultValue) {
@@ -495,8 +510,11 @@ public class TombDialogAction extends TombDialog {
         newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
         newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));
         newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
+        newRelation.put(KEY_WIKIDATA, nullOnBlank(pm.getWikidata()));
         newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));
 
+        newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));
+        newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
         newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));
         newRelation.put(KEY_FROM_FAMILY, nullOnBlank(pm.getFromFamily()));
     }
@@ -507,11 +525,13 @@ public class TombDialogAction extends TombDialog {
             getLblHistoric().setText(tr(getLblHistoric().getText()));
             getLblTombType().setText(tr(getLblTombType().getText()));
             getLblReligion().setText(tr(getLblReligion().getText()));
+            getLblDenomination().setText(tr(getLblDenomination().getText()));
             getLblTombData().setText(tr(getLblTombData().getText()));
 
             // XXX i don't known if it is correct translation for strange names: (with "-")
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
             getLblImage().setText("- " + tr("image"));
+            getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
 
         } catch (Exception e) {
             e.printStackTrace();
