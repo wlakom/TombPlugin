@@ -42,15 +42,20 @@ public class TombDialog extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
     protected JTable personsTable;
+    protected JComboBox cbTombType;
     protected JTextField txtWikipedia;
     protected JTextField txtImage;
-    protected JComboBox cbTombType;
+
     protected JComboBox cbReligion;
-    private JLabel lblTombType;
+    protected JComboBox cbDenomination;
+
     private JLabel lblReligion;
+    private JLabel lblDenomination;
     private JLabel lblTombData;
     private JLabel lblWikipediaArticle;
     private JLabel lblImage;
+    private JLabel lblIWikimedia_commons;
+    private JLabel lblFlickr;
     private JLabel lblHistoric;
     private JComboBox cbHistoric;
     private JButton btnSearch;
@@ -102,17 +107,18 @@ public class TombDialog extends JDialog {
                         FormSpecs.DEFAULT_ROWSPEC,
                         FormSpecs.RELATED_GAP_ROWSPEC,
                         RowSpec.decode("12dlu"),}));
+                    cbHistoric = new JComboBox();
                 {
                     lblHistoric = new JLabel("Historic kind");
                     lblHistoric.setFont(lblHistoric.getFont().deriveFont(lblHistoric.getFont().getStyle() | Font.BOLD));
                     panel_1.add(lblHistoric, "1, 1, left, default");
                 }
                 {
-                    cbHistoric = new JComboBox();
                     cbHistoric.setModel(new DefaultComboBoxModel(new String[] {"", "tomb", "memorial"}));
                     cbHistoric.setEditable(true);
                     panel_1.add(cbHistoric, "3, 1, fill, default");
                 }
+              
                 {
                     lblTombData = new JLabel("Tomb data");
                     panel_1.add(lblTombData, "5, 1");
@@ -144,18 +150,50 @@ public class TombDialog extends JDialog {
                 {
                     cbReligion = new JComboBox();
                     cbReligion.setEditable(true);
-                    cbReligion.setModel(new DefaultComboBoxModel(new String[] {"", "christian", "jewish", "muslim"}));
+                    cbReligion.setModel(new DefaultComboBoxModel(new String[] {"", "christian", "jewish", "muslim"}));                    
                     panel_1.add(cbReligion, "3, 5, fill, default");
                 }
+              {
+                    lblDenomination = new JLabel("Denomination");
+                    panel_1.add(lblDenomination, "1, 5, left, default");
+                }
+                {
+                    cbDenomination = new JComboBox();
+                    cbDenomination.setEditable(true);
+                    cbDenomination.setModel(new DefaultComboBoxModel(new String[] {"", "roman_catholic", "greek_catholic", "orthodox", "protestant",  "conservative", "shia", "sunni"}));
+                     panel_1.add(cbDenomination, "3, 5, fill, default");
+                }
+                     
                 {
                     lblImage = new JLabel("- image");
                     panel_1.add(lblImage, "5, 5, left, default");
                 }
+                
                 {
                     txtImage = new JTextField();
                     panel_1.add(txtImage, "7, 5, fill, default");
                     txtImage.setColumns(10);
                 }
+                
+                {
+                    lblWikimedia_commons = new JLabel("- wikimedia_commands");
+                    panel_1.add(lblImage, "5, 5, left, default");
+                }
+                {
+                    txtWikimedia_commons = new JTextField();
+                    panel_1.add(txtWikimedia_commons, "7, 5, fill, default");
+                    txtWikimedia_commons.setColumns(10);
+                }
+              {
+                    lblFlickr = new JLabel("- flickr");
+                    panel_1.add(lblFlickr, "5, 5, left, default");
+                }
+                {
+                    txtFlickr = new JTextField();
+                    panel_1.add(txtFlickr, "7, 5, fill, default");
+                    txtFlickr.setColumns(10);
+                }
+                
             }
         }
         {
