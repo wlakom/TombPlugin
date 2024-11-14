@@ -23,11 +23,16 @@ public class PersonSearchDto {
 
     private String wikipedia;
 
+    private String wikidata;
+
     private String description;
 
-    private String familyName;
+    private String family_name;
 
+    private String birthplace;
 
+    private String deathplace;
+    
     /**
      * @return the id
      */
@@ -113,18 +118,43 @@ public class PersonSearchDto {
         this.description = description;
     }
     /**
-     * @return the familyName
+     * @return the family_name
      */
-    public String getFamilyName() {
-        return familyName;
+    public String getFamily_name() {
+        return family_name;
     }
     /**
-     * @param familyName the familyName to set
+     * @param family_name the family_name to set
      */
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setFamily_name(String family_name) {
+        this.family_name = family_name;
     }
 
+     /**
+     * @return the birthplace
+     */
+    public String getBirthplace() {
+        return this.birthplace;
+    }
+    /**
+     * @param birthplace the Birthplace to set
+     */
+    public void setBirthplace(String birthplace) {
+        this.birthplace = birthplace;
+    }
+
+     /**
+     * @return the deathplace
+     */
+    public String getDeathplace() {
+        return this.deathplace;
+    }
+    /**
+     * @param deathplace the Deathplace to set
+     */
+    public void setDeathplace(String deathplace) {
+        this.deathplace = deathplace;
+    }
 
 }
 
