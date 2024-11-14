@@ -34,15 +34,16 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
 
     private String[] columnNames = {
             tr("Name of person"),
+            tr("Family name"),        
             tr("Date of birth"),
+            tr("Birth place"),        
             tr("Date of death"),
+            tr("Death place"),
+            tr("Description"),
+            tr("Lived in"),        
             tr("Wikipedia"),
             tr("Wikidata"),
-            tr("Description"),
-            tr("Lived in"),
-            tr("Family name"),
-            tr("Birth place"),
-            tr("Death place"),
+
             tr("Image"),
             tr("Wikimedia_Commons"),
             tr("Flickr"),
@@ -86,21 +87,24 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
         case 0:
             return pm.getName();
         case 1:
-            return this.dateService.dateToVisible(pm.getBorn());
+            return pm.getFamily_name();                
         case 2:
-            return this.dateService.dateToVisible(pm.getDied());
+            return this.dateService.dateToVisible(pm.getBorn());
         case 3:
-            return pm.getWikipedia();
+            return pm.getBirthplace();                
         case 4:
-            return pm.getDescription();
+            return this.dateService.dateToVisible(pm.getDied());
         case 5:
-            return pm.getLived_in();
+            return pm.getDeathplace();                
         case 6:
-            return pm.getFamily_name();
+            return pm.getDescription();
         case 7:
-            return pm.getBirthplace();
+            return pm.getLived_in();
         case 8:
-            return pm.getDeathplace();
+            return pm.getWikipedia();
+        case 9:
+            return pm.getWikidata();
+
         default:
             break;
         }
@@ -147,29 +151,32 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             pm.setName((String) value);
             break;
         case 1:
+            pm.setFamily_name((String) value);
+            break;                
+        case 2:
             pm.setBorn(this.dateService.dateToIso((String) value));
             break;
-        case 2:
+        case 3:
+            pm.setBirthplace((String) value);
+            break;                
+        case 4:
             pm.setDied(this.dateService.dateToIso((String) value));
             break;
-        case 3:
-            pm.setWikipedia((String) value);
-            break;
-        case 4:
-            pm.setDescription((String) value);
-            break;
         case 5:
-            pm.setLivedIn((String) value);
-            break;
-        case 6:
-            pm.setFamily_name((String) value);
-            break;
-        case 7:
-            pm.setBirthplace((String) value);
-            break;
-        case 8:
             pm.setDeathplace((String) value);
             break;
+        case 6:
+            pm.setDescription((String) value);
+            break;                
+        case 7:
+            pm.setLivedIn((String) value);
+            break;                
+        case 8:
+            pm.setWikipedia((String) value);
+            break;
+        case 9:
+            pm.setWikidata((String) value);
+            break;                
 
         default:
             break;
