@@ -274,7 +274,7 @@ public class TombDialogAction extends TombDialog {
         pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
         pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
-        pm.setFromFamily(osmPrimitive.get(KEY_FROM_FAMILY));
+        pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));
         pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));
         pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));
 
@@ -516,7 +516,7 @@ public class TombDialogAction extends TombDialog {
         newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));
         newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
         newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));
-        newRelation.put(KEY_FROM_FAMILY, nullOnBlank(pm.getFromFamily()));
+        newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));
     }
 
     public void localize() {
