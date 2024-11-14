@@ -63,6 +63,9 @@ public class TombDialogAction extends TombDialog {
 
     private static final String ROLE_MEMORIAL = "memorial";
     private static final String ROLE_TOMB = "tomb";
+    private static final String KEY_PERSON = "person";
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_NAME = "name";
     private static final String KEY_FAMILY_NAME = "family_name";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";
@@ -70,21 +73,18 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_DEATHPLACE = "deathplace";
     private static final String KEY_BORN = "born";
     private static final String KEY_BIRTHPLACE = "birthplace";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_PERSON = "person";
-    private static final String KEY_TYPE = "type";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
-    private static final String KEY_FRICKR = "frickr";
+
     private static final String KEY_WIKIPEDIA = "wikipedia";
     private static final String KEY_WIKIDATA = "wikidata";
     private static final String KEY_RELIGION = "religion";
     private static final String KEY_DENOMINATION = "denomination";
     private static final String KEY_HISTORIC = "historic";
+    private static final String KEY_IMAGE = "image";
+    private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
+    private static final String KEY_FRICKR = "frickr";
     private static final String KEY_TOMB = ROLE_TOMB;
     private static final String VALUE_TOMB = ROLE_TOMB;
     private static final String VALUE_MEMORIAL = ROLE_MEMORIAL;
-
 
     private List<PersonModel> persons;
     private Set<Relation> personsRemoved;
@@ -269,14 +269,17 @@ public class TombDialogAction extends TombDialog {
     private PersonModel convert(Relation osmPrimitive) {
         PersonModel pm = new PersonModel();
         pm.setName(osmPrimitive.get(KEY_NAME));
+        pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));        
         pm.setBorn(osmPrimitive.get(KEY_BORN));
+        pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));        
         pm.setDied(osmPrimitive.get(KEY_DIED));
-        pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
+        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));        
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
         pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
-        pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));
-        pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));
-        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));
+        pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
+        pm.setWikipedia(osmPrimitive.get(KEY_WIKIDATA));
+
+        
         pm.setImage(osmPrimitive.get(IMAGE));
         pm.setWikimedia_commons(osmPrimitive.get(WIKIMEDIA_COMMONS));
         pm.setFlickr(osmPrimitive.get(FLICKR));
@@ -300,9 +303,10 @@ public class TombDialogAction extends TombDialog {
         txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
         txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
 
-        txtSection_name.setText(tombPrimitive.get(SECTION:NAME));
-        txtSection_row.setText(tombPrimitive.get(SECTION:ROW));
-        txtSection_place.setText(tombPrimitive.get(SECTION:PLACE));
+        txtRef.setText(tombPrimitive.get(REF));        
+        txtSection_name.setText(tombPrimitive.get(SECTION_NAME));
+        txtSection_row.setText(tombPrimitive.get(SECTION_ROW));
+        txtSection_place.setText(tombPrimitive.get(SECTION_PLACE));
 
     }
 
@@ -378,9 +382,10 @@ public class TombDialogAction extends TombDialog {
         n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
         n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
         n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
-        n.put(KEY_SECTION:NAME, nullOnBlank(txtFlickr.getSection_name()));
-        n.put(KEY_SECTION:ROW, nullOnBlank(txtFlickr.getSection_row()));
-        n.put(KEY_SECTION:PLACE, nullOnBlank(txtFlickr.getSection_place()));
+        n.put(KEY_REF, nullOnBlank(txtRef.getText()));     
+        n.put(KEY_SECTION_NAME, nullOnBlank(txtFlickr.getSection_name()));
+        n.put(KEY_SECTION_ROW, nullOnBlank(txtFlickr.getSection_row()));
+        n.put(KEY_SECTION_PLACE, nullOnBlank(txtFlickr.getSection_place()));
 
     }
 
@@ -518,16 +523,21 @@ public class TombDialogAction extends TombDialog {
 
     public void injectRelation(PersonModel pm, Relation newRelation) {
         newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
+        newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));        
         newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
+        newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));        
         newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));
-        newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
-        newRelation.put(KEY_WIKIDATA, nullOnBlank(pm.getWikidata()));
-        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));
-
-        newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));
         newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
-        newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));
-        newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));
+        newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));        
+        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));        
+        newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
+    
+        newRelation.put(KEY_REF, nullOnBlank(pm.getRef()));
+        newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
+        newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
+        newRelation.put(KEY_SECTION_ROW, nullOnBlank(pm.getSection_row()));
+        newRelation.put(KEY_SECTION_PLACE, nullOnBlank(pm.getSection_place()));        
+
     }
 
     public void localize() {
@@ -546,6 +556,11 @@ public class TombDialogAction extends TombDialog {
             getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
             getLblFlickr().setText("- " + tr("flickr"));
 
+            getLblRef().setText("- " + tr("ref"));
+            getLblSection_name().setText("- " + tr("section:name"));
+            getLblSection_row().setText("- " + tr("section:row"));
+            getLblSection_place().setText("- " + tr("section:place"));            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
