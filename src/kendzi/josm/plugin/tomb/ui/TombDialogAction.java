@@ -277,6 +277,9 @@ public class TombDialogAction extends TombDialog {
         pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));
         pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));
         pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));
+        pm.setImage(osmPrimitive.get(IMAGE));
+        pm.setWikimedia_commons(osmPrimitive.get(WIKIMEDIA_COMMONS));
+        pm.setFlickr(osmPrimitive.get(FLICKR));
 
         pm.setRelation(osmPrimitive);
         return pm;
@@ -296,6 +299,10 @@ public class TombDialogAction extends TombDialog {
         txtImage.setText(tombPrimitive.get(KEY_IMAGE));
         txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
         txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
+
+        txtSection_name.setText(tombPrimitive.get(SECTION:NAME));
+        txtSection_row.setText(tombPrimitive.get(SECTION:ROW));
+        txtSection_place.setText(tombPrimitive.get(SECTION:PLACE));
 
     }
 
@@ -371,6 +378,10 @@ public class TombDialogAction extends TombDialog {
         n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
         n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
         n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
+        n.put(KEY_SECTION:NAME, nullOnBlank(txtFlickr.getSection_name()));
+        n.put(KEY_SECTION:ROW, nullOnBlank(txtFlickr.getSection_row()));
+        n.put(KEY_SECTION:PLACE, nullOnBlank(txtFlickr.getSection_place()));
+
     }
 
     private String defaultValue(String str, String defaultValue) {
@@ -530,8 +541,10 @@ public class TombDialogAction extends TombDialog {
 
             // XXX i don't known if it is correct translation for strange names: (with "-")
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
+            getLblWikidata().setText("- " + tr("wikidata"));
             getLblImage().setText("- " + tr("image"));
             getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
+            getLblFlickr().setText("- " + tr("flickr"));
 
         } catch (Exception e) {
             e.printStackTrace();
