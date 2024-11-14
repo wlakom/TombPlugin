@@ -23,6 +23,9 @@ public class Person {
     //			wikipedia=jezyk:nazwa
     String wikipedia;
 
+     //			wikidata
+    String wikidata;
+
     //			birth=YYYY-MM-DD
     String born;
 
@@ -34,8 +37,15 @@ public class Person {
 
     String livedIn;
 
-    String fromFamily;
+    //         family_name - nazwisko rodowe
+    String family_name;
 
+    //			birthplace - Miejsce urodzenia
+    String birthplace;
+
+     //			deathplace - Miejsce zgonu
+    String deathplace;
+    
     /**
      * @return the name
      */
@@ -95,17 +105,17 @@ public class Person {
     }
 
     /**
-     * @return the fromFamily
+     * @return the family_name
      */
-    public String getFromFamily() {
-        return fromFamily;
+    public String getFamily_name() {
+        return Family_name;
     }
 
     /**
-     * @param fromFamily the fromFamily to set
+     * @param family_name the Family_name to set
      */
-    public void setFromFamily(String fromFamily) {
-        this.fromFamily = fromFamily;
+    public void setFamily_name(String Family_name) {
+        this.Family_name = Family_name;
     }
 
     /**
@@ -136,7 +146,32 @@ public class Person {
         this.died = died;
     }
 
+ /**
+     * @return the birthplace
+     */
+    public String getBirthplace() {
+        return birthplace;
+    }
 
+    /**
+     * @param birthplace the Birthplace to set
+     */
+    public void setBirthplace(String birthplace) {
+        this.birthplace = birthplace;
+    }
 
+ /**
+     * @return the deathplace
+     */
+    public String getDeathplace() {
+        return deathplace;
+    }
+
+    /**
+     * @param deathplace the Deathplace to set
+     */
+    public void setDeathplace(String deathplace) {
+        this.deathplace = deathplace;
+    }
 
 }
