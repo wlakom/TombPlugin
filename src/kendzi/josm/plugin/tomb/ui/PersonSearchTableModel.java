@@ -34,15 +34,15 @@ public class PersonSearchTableModel extends AbstractTableModel {
 
     private String[] columnNames = {
             tr("Name of person"),
+            tr("Family name")        
             tr("Date of birth"),
             tr("Date of death"),
+            tr("Birth place"),
+            tr("Death place"), 
+            tr("Lived in"),  
+            tr("Description"),        
             tr("Wikipedia"),
             tr("Wikidata"),
-            tr("Description"),
-            tr("Lived in"),
-            tr("Family name")
-            tr("Birth place"),
-            tr("Death place"),
     };
 
     private List<PersonSearchDto> data = new ArrayList<PersonSearchDto>();
@@ -83,15 +83,15 @@ public class PersonSearchTableModel extends AbstractTableModel {
         case 2:
             return this.dateService.dateToVisible(pm.getBorn());
         case 3:
-            return this.dateService.dateToVisible(pm.getBirthplace());                
-        case 4:
             return this.dateService.dateToVisible(pm.getDied());
+        case 4:
+            return this.dateService.dateToVisible(pm.getBirthplace());                 
         case 5:
             return this.dateService.dateToVisible(pm.getDeathplace());                
         case 6:
-            return pm.getDescription();
-        case 7:
             return pm.getLivedIn();
+        case 7:
+            return pm.getDescription();                
         case 8:
             return pm.getWikipedia();
         case 9:
