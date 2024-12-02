@@ -60,28 +60,26 @@ import kendzi.josm.plugin.tomb.util.StringUtil;
  * @author Tomasz Kędziora (Kendzi)
  */
 public class TombDialogAction extends TombDialog {
-
+    private static final String KEY_HISTORIC = "historic";
     private static final String ROLE_MEMORIAL = "memorial";
     private static final String ROLE_TOMB = "tomb";
     private static final String KEY_PERSON = "person";
     private static final String KEY_TYPE = "type";
     private static final String KEY_NAME = "name";
     private static final String KEY_FAMILY_NAME = "family_name";
-    private static final String KEY_LIVED_IN = "lived_in";
-    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_BORN = "born";    
     private static final String KEY_DIED = "died";
     private static final String KEY_DEATHPLACE = "deathplace";
-    private static final String KEY_BORN = "born";
     private static final String KEY_BIRTHPLACE = "birthplace";
-
+    private static final String KEY_LIVED_IN = "lived_in";
+    private static final String KEY_DESCRIPTION = "description";   
+    private static final String KEY_IMAGE = "image";
+    private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
+    private static final String KEY_FRICKR = "frickr";    
     private static final String KEY_WIKIPEDIA = "wikipedia";
     private static final String KEY_WIKIDATA = "wikidata";
     private static final String KEY_RELIGION = "religion";
     private static final String KEY_DENOMINATION = "denomination";
-    private static final String KEY_HISTORIC = "historic";
-    private static final String KEY_IMAGE = "image";
-    private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
-    private static final String KEY_FRICKR = "frickr";
     private static final String KEY_TOMB = ROLE_TOMB;
     private static final String VALUE_TOMB = ROLE_TOMB;
     private static final String VALUE_MEMORIAL = ROLE_MEMORIAL;
@@ -271,43 +269,41 @@ public class TombDialogAction extends TombDialog {
         pm.setName(osmPrimitive.get(KEY_NAME));
         pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));        
         pm.setBorn(osmPrimitive.get(KEY_BORN));
+        pm.setDied(osmPrimitive.get(KEY_DIED));        
         pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));        
-        pm.setDied(osmPrimitive.get(KEY_DIED));
-        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));        
+        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));  
+        pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));        
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
-        pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));
-        pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
-        pm.setWikipedia(osmPrimitive.get(KEY_WIKIDATA));
-
-        
         pm.setImage(osmPrimitive.get(IMAGE));
         pm.setWikimedia_commons(osmPrimitive.get(WIKIMEDIA_COMMONS));
         pm.setFlickr(osmPrimitive.get(FLICKR));
-
+        pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
+        pm.setWikipedia(osmPrimitive.get(KEY_WIKIDATA));
         pm.setRelation(osmPrimitive);
         return pm;
     }
 
     private void fillAttributes(OsmPrimitive tombPrimitive) {
 
+        String cemetery = defaultValue(tombPrimitive.get(KEY_CEMETERY), VALUE_GRAVE);
         String historic = defaultValue(tombPrimitive.get(KEY_HISTORIC), VALUE_TOMB);
 
         getCbHistoric().setSelectedItem(historic);
         cbTombType.setSelectedItem(tombPrimitive.get(KEY_TOMB));
         cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
         cbDenomination.setSelectedItem(tombPrimitive.get(KEY_DENOMINATION));
-        
-        txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
-        txtWikidata.setText(tombPrimitive.get(KEY_WIKIDATA));
-        txtImage.setText(tombPrimitive.get(KEY_IMAGE));
-        txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
-        txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
 
         txtRef.setText(tombPrimitive.get(REF));        
         txtSection_name.setText(tombPrimitive.get(SECTION_NAME));
         txtSection_row.setText(tombPrimitive.get(SECTION_ROW));
         txtSection_place.setText(tombPrimitive.get(SECTION_PLACE));
+        
+        txtImage.setText(tombPrimitive.get(KEY_IMAGE));
+        txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
+        txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
 
+        txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
+        txtWikidata.setText(tombPrimitive.get(KEY_WIKIDATA));
     }
 
     @Override
@@ -372,21 +368,24 @@ public class TombDialogAction extends TombDialog {
 
     private void injectTombPrimitive(OsmPrimitive n) {
 
+        n.put(KEY_CEMETERY, defaultValue((String) getCbCemetery().getSelectedItem(), VALUE_GRAVE));
         n.put(KEY_HISTORIC, defaultValue((String) getCbHistoric().getSelectedItem(), VALUE_TOMB));
 
         n.put(KEY_TOMB, nullOnBlank((String) cbTombType.getSelectedItem()));
         n.put(KEY_RELIGION, nullOnBlank((String) cbReligion.getSelectedItem()));
         n.put(KEY_DENOMINATION, nullOnBlank((String) cbDenomination.getSelectedItem()));
-        n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
-        n.put(KEY_WIKIDATA, nullOnBlank(txtWikidata.getText()));
-        n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
-        n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
-        n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
+
         n.put(KEY_REF, nullOnBlank(txtRef.getText()));     
         n.put(KEY_SECTION_NAME, nullOnBlank(txtFlickr.getSection_name()));
         n.put(KEY_SECTION_ROW, nullOnBlank(txtFlickr.getSection_row()));
-        n.put(KEY_SECTION_PLACE, nullOnBlank(txtFlickr.getSection_place()));
+        n.put(KEY_SECTION_PLACE, nullOnBlank(txtFlickr.getSection_place()));        
 
+        n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
+        n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
+        n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
+
+        n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
+        n.put(KEY_WIKIDATA, nullOnBlank(txtWikidata.getText()));
     }
 
     private String defaultValue(String str, String defaultValue) {
@@ -525,13 +524,19 @@ public class TombDialogAction extends TombDialog {
         newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
         newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));        
         newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
+        newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));        
         newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));        
-        newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));
         newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
         newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));        
-        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));        
+        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));  
+
+        newRelation.put(KEY_IMAGE, nullOnBlank(pm.getImage()));  
+        newRelation.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(pm.getWikimedia_commons()));
+       newRelation.put(KEY_FLICKR, nullOnBlank(pm.getFlickr())); 
+        
         newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
-    
+        newRelation.put(KEY_WIKIDATA, nullOnBlank(pm.getWikidata()));  
+        
         newRelation.put(KEY_REF, nullOnBlank(pm.getRef()));
         newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
         newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
@@ -543,6 +548,7 @@ public class TombDialogAction extends TombDialog {
     public void localize() {
         try {
 
+            getLblCemetery().setText(tr(getLblCemetery().getText()));
             getLblHistoric().setText(tr(getLblHistoric().getText()));
             getLblTombType().setText(tr(getLblTombType().getText()));
             getLblReligion().setText(tr(getLblReligion().getText()));
@@ -550,12 +556,13 @@ public class TombDialogAction extends TombDialog {
             getLblTombData().setText(tr(getLblTombData().getText()));
 
             // XXX i don't known if it is correct translation for strange names: (with "-")
-            getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
-            getLblWikidata().setText("- " + tr("wikidata"));
             getLblImage().setText("- " + tr("image"));
             getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
             getLblFlickr().setText("- " + tr("flickr"));
-
+            
+            getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
+            getLblWikidata().setText("- " + tr("wikidata"));
+            
             getLblRef().setText("- " + tr("ref"));
             getLblSection_name().setText("- " + tr("section:name"));
             getLblSection_row().setText("- " + tr("section:row"));
