@@ -6,7 +6,7 @@
 
 
 	<!-- put here real JOSM project location -->
-    <property name="plugin.dist.dir" value="/home/kendzi/java/workspace/JOSM/dist"/>
+    <property name="plugin.dist.dir" value="d:\Archiwum\Mapowanie\"/>
   <!--  <property name="plugin.dist.dir" value="../JOSM/dist"/> -->
     <property name="josm" location="${plugin.dist.dir}/josm-custom.jar"/>
 	
@@ -158,7 +158,7 @@
         <property environment="env"/>
     
      <!--
-<condition property="josm.plugins.dir" value="c:\josm_dev\plugins\" else="${user.home}/.josm/plugins">
+<condition property="josm.plugins.dir" value="c:\Users\Władysław Komorek\AppData\Roaming\JOSM\plugins\" else="${user.home}/.josm/plugins">
 <condition property="josm.plugins.dir" value="${env.APPDATA}\Roaming\JOSM\plugins\" else="${user.home}/.josm/plugins">
 -->
         <condition property="josm.plugins.dir" value="${env.APPDATA}/JOSM/plugins" else="${user.home}/.josm/plugins">
