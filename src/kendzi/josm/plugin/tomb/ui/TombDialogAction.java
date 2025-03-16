@@ -73,6 +73,7 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_BIRTHPLACE = "birthplace";
     private static final String KEY_LIVED_IN = "lived_in";
     private static final String KEY_DESCRIPTION = "description";   
+    private static final String KEY_INSCRIPTION = "inscription";   
     private static final String KEY_IMAGE = "image";
     private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
     private static final String KEY_FRICKR = "frickr";    
@@ -274,6 +275,7 @@ public class TombDialogAction extends TombDialog {
         pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));  
         pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));        
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
+        pm.setInscription(osmPrimitive.get(KEY_INSCRIPTION));
         pm.setImage(osmPrimitive.get(IMAGE));
         pm.setWikimedia_commons(osmPrimitive.get(WIKIMEDIA_COMMONS));
         pm.setFlickr(osmPrimitive.get(FLICKR));
@@ -374,6 +376,7 @@ public class TombDialogAction extends TombDialog {
         n.put(KEY_TOMB, nullOnBlank((String) cbTombType.getSelectedItem()));
         n.put(KEY_RELIGION, nullOnBlank((String) cbReligion.getSelectedItem()));
         n.put(KEY_DENOMINATION, nullOnBlank((String) cbDenomination.getSelectedItem()));
+        n.put(KEY_INSCRIPTION, nullOnBlank(txtInscription.getText()));
 
         n.put(KEY_REF, nullOnBlank(txtRef.getText()));     
         n.put(KEY_SECTION_NAME, nullOnBlank(txtFlickr.getSection_name()));
@@ -384,6 +387,7 @@ public class TombDialogAction extends TombDialog {
         n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
         n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
 
+        n.put(KEY_DESCRIPTION, nullOnBlank(txtDescription.getText()));
         n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
         n.put(KEY_WIKIDATA, nullOnBlank(txtWikidata.getText()));
     }
@@ -529,7 +533,8 @@ public class TombDialogAction extends TombDialog {
         newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
         newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));        
         newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));  
-
+        newRelation.put(KEY_INSCRIPTION, nullOnBlank(pm.getInscription())); 
+        
         newRelation.put(KEY_IMAGE, nullOnBlank(pm.getImage()));  
         newRelation.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(pm.getWikimedia_commons()));
        newRelation.put(KEY_FLICKR, nullOnBlank(pm.getFlickr())); 
@@ -554,12 +559,14 @@ public class TombDialogAction extends TombDialog {
             getLblReligion().setText(tr(getLblReligion().getText()));
             getLblDenomination().setText(tr(getLblDenomination().getText()));
             getLblTombData().setText(tr(getLblTombData().getText()));
-
+            getLblInscription().setText("- " + tr("inscription"));
+            
             // XXX i don't known if it is correct translation for strange names: (with "-")
             getLblImage().setText("- " + tr("image"));
             getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
             getLblFlickr().setText("- " + tr("flickr"));
-            
+
+            getLblDescription().setText("- " + tr("description"));
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
             getLblWikidata().setText("- " + tr("wikidata"));
             
