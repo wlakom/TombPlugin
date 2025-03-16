@@ -27,6 +27,8 @@ public class PersonSearchDto {
 
     private String description;
 
+    private String inscription;
+
     private String family_name;
 
     private String birthplace;
@@ -117,6 +119,19 @@ public class PersonSearchDto {
     public void setDescription(String description) {
         this.description = description;
     }
+        /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+    /**
+     * @param inscription the inscription to set
+     */
+    public void setDescription(String inscription) {
+        this.inscription = inscription;
+    }
+ 
     /**
      * @return the family_name
      */
