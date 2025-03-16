@@ -39,6 +39,7 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             tr("Birth place"),        
             tr("Date of death"),
             tr("Death place"),
+            tr("Inscription"),
             tr("Description"),
             tr("Lived in"),        
             tr("Wikipedia"),
@@ -99,10 +100,12 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
         case 6:
             return pm.getDescription();
         case 7:
-            return pm.getLived_in();
+            return pm.getInscription();
         case 8:
-            return pm.getWikipedia();
+            return pm.getLived_in();
         case 9:
+            return pm.getWikipedia();
+        case 10:
             return pm.getWikidata();
 
         default:
@@ -169,12 +172,15 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             pm.setDescription((String) value);
             break;                
         case 7:
+            pm.setInscription((String) value);
+            break;  
+        case 8:
             pm.setLivedIn((String) value);
             break;                
-        case 8:
+        case 9:
             pm.setWikipedia((String) value);
             break;
-        case 9:
+        case 10:
             pm.setWikidata((String) value);
             break;                
 
