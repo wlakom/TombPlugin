@@ -50,6 +50,7 @@ public class SearchPersonRelationService {
             XPathExpression wikipediaX = XmlUtil.createXpath("tag[@k='wikipedia']/@v");
             XPathExpression wikidataX = XmlUtil.createXpath("tag[@k='wikidata']/@v");
             XPathExpression descriptionX = XmlUtil.createXpath("tag[@k='description']/@v");
+            XPathExpression inscriptionX = XmlUtil.createXpath("tag[@k='inscription']/@v");
             XPathExpression family_nameX = XmlUtil.createXpath("tag[@k='family_name']/@v");
             XPathExpression lived_inX = XmlUtil.createXpath("tag[@k='lived_in']/@v");
             XPathExpression birthplaceX = XmlUtil.createXpath("tag[@k='birthplace']/@v");
@@ -72,6 +73,7 @@ public class SearchPersonRelationService {
 
                 p.setWikipedia(XmlUtil.findString(node, wikipediaX));
                 p.setDescription(XmlUtil.findString(node, descriptionX));
+                p.setDescription(XmlUtil.findString(node, inscriptionX));
                 p.setFamily_name(XmlUtil.findString(node, family_nameX));
                 p.setLived_in(XmlUtil.findString(node, lived_inX));
 
