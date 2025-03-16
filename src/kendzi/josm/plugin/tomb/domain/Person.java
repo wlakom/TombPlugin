@@ -34,6 +34,9 @@ public class Person {
 
     //			description - luzny opis, np. grupy zawodowej
     String description;
+    
+    //			inscription - cytat lub myśl wyryta na nagrobku
+    String inscription;
 
     String livedIn;
 
@@ -88,6 +91,19 @@ public class Person {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+   /**
+     * @return the inscription
+     */
+    public String getInscription() {
+        return this.inscription;
+    }
+
+    /**
+     * @param inscription the inscription to set
+     */
+    public void setDescription(String inscription) {
+        this.inscription = inscription;
     }
 
     /**
