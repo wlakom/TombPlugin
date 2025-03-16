@@ -40,7 +40,8 @@ public class PersonSearchTableModel extends AbstractTableModel {
             tr("Birth place"),
             tr("Death place"), 
             tr("Lived in"),  
-            tr("Description"),        
+            tr("Description"),  
+            tr("Inscription"),
             tr("Wikipedia"),
             tr("Wikidata"),
     };
@@ -91,10 +92,12 @@ public class PersonSearchTableModel extends AbstractTableModel {
         case 6:
             return pm.getLivedIn();
         case 7:
-            return pm.getDescription();                
+            return pm.getDescription();   
         case 8:
-            return pm.getWikipedia();
+            return pm.getInscription(); 
         case 9:
+            return pm.getWikipedia();
+        case 10:
             return pm.getWikidata();       
         default:
             break;
