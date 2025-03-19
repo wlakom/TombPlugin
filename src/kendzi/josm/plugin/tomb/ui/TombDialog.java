@@ -53,8 +53,10 @@ public class TombDialog extends JDialog {
     private JLabel lblDenomination;
     private JLabel lblTombData;
     private JLabel lblWikipediaArticle;
+    private JLabel lblInscription;
+    private JLabel lblDescription;
     private JLabel lblImage;
-    private JLabel lblIWikimedia_commons;
+    private JLabel lblWikimedia_commons;
     private JLabel lblFlickr;
     private JLabel lblHistoric;
     private JComboBox cbHistoric;
@@ -176,7 +178,7 @@ public class TombDialog extends JDialog {
                 }
                 
                 {
-                    lblWikimedia_commons = new JLabel("- wikimedia_commands");
+                    lblWikimedia_commons = new JLabel("- wikimedia_commons");
                     panel_1.add(lblImage, "5, 5, left, default");
                 }
                 {
@@ -324,6 +326,12 @@ public class TombDialog extends JDialog {
     }
     public JLabel getLblImage() {
         return lblImage;
+    }
+    public JLabel getLblWikimedia_commons() {
+        return lblWikimedia_commons;
+    }
+    public JLabel getLblFlickr() {
+        return lblFlickr;
     }
     public JLabel getLblHistoric() {
         return lblHistoric;
