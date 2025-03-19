@@ -15,7 +15,7 @@ public class PersonSearchDto {
 
     private String name;
 
-    private String livedIn;
+    private String lived_In;
 
     private String born;
 
@@ -60,16 +60,16 @@ public class PersonSearchDto {
         this.name = name;
     }
     /**
-     * @return the livedIn
+     * @return the lived_In
      */
-    public String getLivedIn() {
-        return this.livedIn;
+    public String getLived_In() {
+        return this.lived_In;
     }
     /**
-     * @param livedIn the livedIn to set
+     * @param lived_In the lived_In to set
      */
-    public void setLivedIn(String livedIn) {
-        this.livedIn = livedIn;
+    public void setLived_In(String lived_In) {
+        this.lived_In = lived_In;
     }
     /**
      * @return the born
@@ -107,6 +107,18 @@ public class PersonSearchDto {
     public void setWikipedia(String wikipedia) {
         this.wikipedia = wikipedia;
     }
+/**
+     * @return the wikidata
+     */
+    public String getWikidata() {
+        return wikidata;
+    }
+    /**
+     * @param wikidata the wikidata to set
+     */
+    public void setWikidata(String Wikidata) {
+        this.wikidata = wikidata;
+    }
     /**
      * @return the description
      */
@@ -120,15 +132,15 @@ public class PersonSearchDto {
         this.description = description;
     }
         /**
-     * @return the description
+     * @return the inscription
      */
-    public String getDescription() {
-        return description;
+    public String getInscription() {
+        return inscription;
     }
     /**
      * @param inscription the inscription to set
      */
-    public void setDescription(String inscription) {
+    public void setInscription(String inscription) {
         this.inscription = inscription;
     }
  
@@ -145,6 +157,20 @@ public class PersonSearchDto {
         this.family_name = family_name;
     }
 
+   /**
+     * @return the lived_In
+     */
+    public String getLived_In() {
+        return lived_In;
+    }
+    /**
+     * @param lived_In the lived_In to set
+     */
+    public void setLived_In(String lived_In) {
+        this.lived_In = lived_In;
+    }
+
+
      /**
      * @return the birthplace
      */
@@ -152,7 +178,7 @@ public class PersonSearchDto {
         return this.birthplace;
     }
     /**
-     * @param birthplace the Birthplace to set
+     * @param birthplace the birthplace to set
      */
     public void setBirthplace(String birthplace) {
         this.birthplace = birthplace;
@@ -165,11 +191,10 @@ public class PersonSearchDto {
         return this.deathplace;
     }
     /**
-     * @param deathplace the Deathplace to set
+     * @param deathplace the deathplace to set
      */
     public void setDeathplace(String deathplace) {
         this.deathplace = deathplace;
     }
 
 }
-
