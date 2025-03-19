@@ -34,14 +34,14 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
 
     private String[] columnNames = {
             tr("Name of person"),
-            tr("Family name"),        
+            tr("Family_name"),
             tr("Date of birth"),
-            tr("Birth place"),        
+            tr("Birth place"),
             tr("Date of death"),
             tr("Death place"),
             tr("Inscription"),
             tr("Description"),
-            tr("Lived in"),        
+            tr("Lived_In"),
             tr("Wikipedia"),
             tr("Wikidata"),
 
@@ -88,15 +88,15 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
         case 0:
             return pm.getName();
         case 1:
-            return pm.getFamily_name();                
+            return pm.getFamily_name();
         case 2:
             return this.dateService.dateToVisible(pm.getBorn());
         case 3:
-            return pm.getBirthplace();                
+            return pm.getBirthplace();
         case 4:
             return this.dateService.dateToVisible(pm.getDied());
         case 5:
-            return pm.getDeathplace();                
+            return pm.getDeathplace();
         case 6:
             return pm.getDescription();
         case 7:
@@ -175,7 +175,7 @@ public class TombDialogPersonTableModel extends AbstractTableModel {
             pm.setInscription((String) value);
             break;  
         case 8:
-            pm.setLivedIn((String) value);
+            pm.setLived_In((String) value);
             break;                
         case 9:
             pm.setWikipedia((String) value);
