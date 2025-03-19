@@ -67,16 +67,16 @@ public class TombDialogAction extends TombDialog {
     private static final String KEY_TYPE = "type";
     private static final String KEY_NAME = "name";
     private static final String KEY_FAMILY_NAME = "family_name";
-    private static final String KEY_BORN = "born";    
+    private static final String KEY_BORN = "born";
     private static final String KEY_DIED = "died";
     private static final String KEY_DEATHPLACE = "deathplace";
     private static final String KEY_BIRTHPLACE = "birthplace";
-    private static final String KEY_LIVED_IN = "lived_in";
-    private static final String KEY_DESCRIPTION = "description";   
-    private static final String KEY_INSCRIPTION = "inscription";   
+    private static final String KEY_LIVED_IN = "lived_In";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_INSCRIPTION = "inscription";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_WIKIMEDIA_COMMONS = "wikimedia_commons";
-    private static final String KEY_FRICKR = "frickr";    
+    private static final String KEY_FRICKR = "frickr";
     private static final String KEY_WIKIPEDIA = "wikipedia";
     private static final String KEY_WIKIDATA = "wikidata";
     private static final String KEY_RELIGION = "religion";
@@ -268,22 +268,23 @@ public class TombDialogAction extends TombDialog {
     private PersonModel convert(Relation osmPrimitive) {
         PersonModel pm = new PersonModel();
         pm.setName(osmPrimitive.get(KEY_NAME));
-        pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));        
+        pm.setFamily_name(osmPrimitive.get(KEY_FAMILY_NAME));
         pm.setBorn(osmPrimitive.get(KEY_BORN));
-        pm.setDied(osmPrimitive.get(KEY_DIED));        
-        pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));        
-        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));  
-        pm.setLivedIn(osmPrimitive.get(KEY_LIVED_IN));        
+        pm.setDied(osmPrimitive.get(KEY_DIED));
+        pm.setBirthplace(osmPrimitive.get(KEY_BIRTHPLACE));
+        pm.setDeathplace(osmPrimitive.get(KEY_DEATHPLACE));
+        pm.setLived_In(osmPrimitive.get(KEY_LIVED_IN));
         pm.setDescription(osmPrimitive.get(KEY_DESCRIPTION));
         pm.setInscription(osmPrimitive.get(KEY_INSCRIPTION));
-        pm.setImage(osmPrimitive.get(IMAGE));
-        pm.setWikimedia_commons(osmPrimitive.get(WIKIMEDIA_COMMONS));
-        pm.setFlickr(osmPrimitive.get(FLICKR));
+        pm.setImage(osmPrimitive.get(KEY_IMAGE));
+        pm.setWikimedia_commons(osmPrimitive.get(KEY_WIKIMEDIA_COMMONS));
+        pm.setFlickr(osmPrimitive.get(KEY_FLICKR));
         pm.setWikipedia(osmPrimitive.get(KEY_WIKIPEDIA));
-        pm.setWikipedia(osmPrimitive.get(KEY_WIKIDATA));
+        pm.setWikidata(osmPrimitive.get(KEY_WIKIDATA));
         pm.setRelation(osmPrimitive);
+        pm.setDenomination(osmPrimitive);
         return pm;
-    }
+}
 
     private void fillAttributes(OsmPrimitive tombPrimitive) {
 
@@ -295,18 +296,21 @@ public class TombDialogAction extends TombDialog {
         cbReligion.setSelectedItem(tombPrimitive.get(KEY_RELIGION));
         cbDenomination.setSelectedItem(tombPrimitive.get(KEY_DENOMINATION));
 
-        txtRef.setText(tombPrimitive.get(REF));        
-        txtSection_name.setText(tombPrimitive.get(SECTION_NAME));
-        txtSection_row.setText(tombPrimitive.get(SECTION_ROW));
-        txtSection_place.setText(tombPrimitive.get(SECTION_PLACE));
-        
+        txtInscription.setText(tombPrimitive.get(KEY_INSCRIPTION));
+        txtDescription.setText(tombPrimitive.get(KEY_DESCRIPTION));
+
+        txtRef.setText(tombPrimitive.get(KEY_REF));
+        txtSection_name.setText(tombPrimitive.get(KEY_SECTION_NAME));
+        txtSection_row.setText(tombPrimitive.get(KEY_SECTION_ROW));
+        txtSection_place.setText(tombPrimitive.get(KEY_SECTION_PLACE));
+
         txtImage.setText(tombPrimitive.get(KEY_IMAGE));
         txtWikimedia_commons.setText(tombPrimitive.get(KEY_WIKIMEDIA_COMMONS));
         txtFlickr.setText(tombPrimitive.get(KEY_FLICKR));
 
         txtWikipedia.setText(tombPrimitive.get(KEY_WIKIPEDIA));
         txtWikidata.setText(tombPrimitive.get(KEY_WIKIDATA));
-    }
+}
 
     @Override
     protected void onSave() {
@@ -314,7 +318,7 @@ public class TombDialogAction extends TombDialog {
 
 
         dispose();
-    }
+}
 
     @Override
     protected void onAddPerson() {
@@ -326,7 +330,7 @@ public class TombDialogAction extends TombDialog {
         personsTable.changeSelection(rowId, 0, false, false);
         personsTable.requestFocus();
 
-    }
+}
 
     @Override
     protected void onRemovePerson(int [] rowsId) {
@@ -334,8 +338,8 @@ public class TombDialogAction extends TombDialog {
 
         if (pm != null && pm.getRelation() != null) {
             personsRemoved.add(pm.getRelation());
-        }
-    }
+}
+}
 
     private void save() {
 
@@ -344,13 +348,13 @@ public class TombDialogAction extends TombDialog {
         savePersons(tombPrimitive, persons, personsRemoved);
 
         saveTombPrimitive(tombPrimitive);
-    }
+}
 
     private void stopEdit() {
         if (personsTable.isEditing()) {
             personsTable.getCellEditor().stopCellEditing();
-        }
-    }
+}
+}
 
     private void saveTombPrimitive(OsmPrimitive tombPrimitive) {
 
@@ -359,12 +363,12 @@ public class TombDialogAction extends TombDialog {
             newPrimitive = new Node((Node) tombPrimitive);
         } else if (tombPrimitive instanceof Way) {
             newPrimitive = new Way((Way) tombPrimitive);
-        }
+}
 
         injectTombPrimitive(newPrimitive);
 
         UndoRedoHandler.getInstance().add(new ChangeCommand(tombPrimitive, newPrimitive));
-    }
+}
 
 
 
@@ -378,16 +382,18 @@ public class TombDialogAction extends TombDialog {
         n.put(KEY_DENOMINATION, nullOnBlank((String) cbDenomination.getSelectedItem()));
         n.put(KEY_INSCRIPTION, nullOnBlank(txtInscription.getText()));
 
-        n.put(KEY_REF, nullOnBlank(txtRef.getText()));     
-        n.put(KEY_SECTION_NAME, nullOnBlank(txtFlickr.getSection_name()));
-        n.put(KEY_SECTION_ROW, nullOnBlank(txtFlickr.getSection_row()));
-        n.put(KEY_SECTION_PLACE, nullOnBlank(txtFlickr.getSection_place()));        
+        n.put(KEY_REF, nullOnBlank(txtRef.getText()));
+        n.put(KEY_SECTION_NAME, nullOnBlank(txtSection_name.getText()));
+        n.put(KEY_SECTION_ROW, nullOnBlank(txtSection_row.getText()));
+        n.put(KEY_SECTION_PLACE, nullOnBlank(txtSection_place.getText()));
 
         n.put(KEY_IMAGE, nullOnBlank(txtImage.getText()));
         n.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(txtWikimedia_commons.getText()));
         n.put(KEY_FLICKR, nullOnBlank(txtFlickr.getText()));
 
         n.put(KEY_DESCRIPTION, nullOnBlank(txtDescription.getText()));
+        n.put(KEY_INSCRIPTION, nullOnBlank(txtInscription.getText()));
+
         n.put(KEY_WIKIPEDIA, nullOnBlank(txtWikipedia.getText()));
         n.put(KEY_WIKIDATA, nullOnBlank(txtWikidata.getText()));
     }
@@ -526,27 +532,27 @@ public class TombDialogAction extends TombDialog {
 
     public void injectRelation(PersonModel pm, Relation newRelation) {
         newRelation.put(KEY_NAME, nullOnBlank(pm.getName()));
-        newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));        
+        newRelation.put(KEY_FAMILY_NAME, nullOnBlank(pm.getFamily_name()));
         newRelation.put(KEY_BORN, nullOnBlank(pm.getBorn()));
-        newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));        
-        newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));        
+        newRelation.put(KEY_DIED, nullOnBlank(pm.getDied()));
+        newRelation.put(KEY_BIRTHPLACE, nullOnBlank(pm.getBirthplace()));
         newRelation.put(KEY_DEATHPLACE, nullOnBlank(pm.getDeathplace()));
-        newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLivedIn()));        
-        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));  
-        newRelation.put(KEY_INSCRIPTION, nullOnBlank(pm.getInscription())); 
+        newRelation.put(KEY_LIVED_IN, nullOnBlank(pm.getLived_In()));
         
-        newRelation.put(KEY_IMAGE, nullOnBlank(pm.getImage()));  
+        newRelation.put(KEY_IMAGE, nullOnBlank(pm.getImage()));
         newRelation.put(KEY_WIKIMEDIA_COMMONS, nullOnBlank(pm.getWikimedia_commons()));
-       newRelation.put(KEY_FLICKR, nullOnBlank(pm.getFlickr())); 
+        newRelation.put(KEY_FLICKR, nullOnBlank(pm.getFlickr()));
         
         newRelation.put(KEY_WIKIPEDIA, nullOnBlank(pm.getWikipedia()));
-        newRelation.put(KEY_WIKIDATA, nullOnBlank(pm.getWikidata()));  
+        newRelation.put(KEY_WIKIDATA, nullOnBlank(pm.getWikidata()));
         
         newRelation.put(KEY_REF, nullOnBlank(pm.getRef()));
         newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
-        newRelation.put(KEY_SECTION_NAME, nullOnBlank(pm.getSection_name()));
         newRelation.put(KEY_SECTION_ROW, nullOnBlank(pm.getSection_row()));
-        newRelation.put(KEY_SECTION_PLACE, nullOnBlank(pm.getSection_place()));        
+        newRelation.put(KEY_SECTION_PLACE, nullOnBlank(pm.getSection_place()));
+		
+        newRelation.put(KEY_DESCRIPTION, nullOnBlank(pm.getDescription()));
+        newRelation.put(KEY_INSCRIPTION, nullOnBlank(pm.getInscription()));
 
     }
 
@@ -566,15 +572,16 @@ public class TombDialogAction extends TombDialog {
             getLblWikimedia_commons().setText("- " + tr("wikimedia_commons"));
             getLblFlickr().setText("- " + tr("flickr"));
 
-            getLblDescription().setText("- " + tr("description"));
             getLblWikipediaArticle().setText("- " + tr("wikipedia article"));
             getLblWikidata().setText("- " + tr("wikidata"));
             
             getLblRef().setText("- " + tr("ref"));
             getLblSection_name().setText("- " + tr("section:name"));
             getLblSection_row().setText("- " + tr("section:row"));
-            getLblSection_place().setText("- " + tr("section:place"));            
-            
+            getLblSection_place().setText("- " + tr("section:place"));
+
+            getLblDescription().setText("- " + tr("description"));
+            getLblInscription().setText("- " + tr("inscription"));            
         } catch (Exception e) {
             e.printStackTrace();
         }
