@@ -52,7 +52,7 @@ public class SearchPersonRelationService {
             XPathExpression descriptionX = XmlUtil.createXpath("tag[@k='description']/@v");
             XPathExpression inscriptionX = XmlUtil.createXpath("tag[@k='inscription']/@v");
             XPathExpression family_nameX = XmlUtil.createXpath("tag[@k='family_name']/@v");
-            XPathExpression lived_inX = XmlUtil.createXpath("tag[@k='lived_in']/@v");
+            XPathExpression lived_InX = XmlUtil.createXpath("tag[@k='lived_In']/@v");
             XPathExpression birthplaceX = XmlUtil.createXpath("tag[@k='birthplace']/@v");
             XPathExpression deathplaceX = XmlUtil.createXpath("tag[@k='deathplace']/@v");
 
@@ -72,10 +72,12 @@ public class SearchPersonRelationService {
                 p.setDied(XmlUtil.findString(node, diedX));
 
                 p.setWikipedia(XmlUtil.findString(node, wikipediaX));
+                p.setWikidata(XmlUtil.findString(node, wikidataX));
+
                 p.setDescription(XmlUtil.findString(node, descriptionX));
-                p.setDescription(XmlUtil.findString(node, inscriptionX));
+                p.setInscription(XmlUtil.findString(node, inscriptionX));
                 p.setFamily_name(XmlUtil.findString(node, family_nameX));
-                p.setLived_in(XmlUtil.findString(node, lived_inX));
+                p.setLived_In(XmlUtil.findString(node, lived_InX));
 
                 p.setBirthplace(XmlUtil.findString(node, birthplaceX));
                 p.setDeathplace(XmlUtil.findString(node, deathplaceX));
