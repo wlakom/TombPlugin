@@ -37,8 +37,8 @@ public class Person {
     
     //			inscription - cytat lub myśl wyryta na nagrobku
     String inscription;
-
-    String livedIn;
+    //         lived_In - zamieszkały w miejscowosci
+    String lived_In;
 
     //         family_name - nazwisko rodowe
     String family_name;
@@ -77,7 +77,19 @@ public class Person {
         this.wikipedia = wikipedia;
     }
 
+   /**
+     * @return the wikidata
+     */
+    public String getWikidata() {
+        return this.wikidata;
+    }
 
+    /**
+     * @param wikidata the wikidata to set
+     */
+    public void setWikidata(String wikidata) {
+        this.wikidata = wikidata;
+    }
 
     /**
      * @return the description
@@ -102,36 +114,36 @@ public class Person {
     /**
      * @param inscription the inscription to set
      */
-    public void setDescription(String inscription) {
+    public void setInscription(String inscription) {
         this.inscription = inscription;
     }
 
     /**
-     * @return the livedIn
+     * @return the lived_In
      */
-    public String getLivedIn() {
-        return livedIn;
+    public String getLived_In() {
+        return lived_In;
     }
 
     /**
-     * @param livedIn the livedIn to set
+     * @param lived_In the lived_In to set
      */
-    public void setLivedIn(String livedIn) {
-        this.livedIn = livedIn;
+    public void setLived_In(String lived_In) {
+        this.lived_In = lived_In;
     }
 
     /**
      * @return the family_name
      */
     public String getFamily_name() {
-        return Family_name;
+        return family_name;
     }
 
     /**
-     * @param family_name the Family_name to set
+     * @param family_name the family_name to set
      */
-    public void setFamily_name(String Family_name) {
-        this.Family_name = Family_name;
+    public void setFamily_name(String family_name) {
+        this.family_name = family_name;
     }
 
     /**
@@ -170,7 +182,7 @@ public class Person {
     }
 
     /**
-     * @param birthplace the Birthplace to set
+     * @param birthplace the birthplace to set
      */
     public void setBirthplace(String birthplace) {
         this.birthplace = birthplace;
@@ -184,7 +196,7 @@ public class Person {
     }
 
     /**
-     * @param deathplace the Deathplace to set
+     * @param deathplace the deathplace to set
      */
     public void setDeathplace(String deathplace) {
         this.deathplace = deathplace;
