@@ -1,21 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project name="TombPlugin" default="dist" basedir=".">
-<property name="commit.message" value="Commit message" />
-<property name="plugin.main.version" value="14260" />
-
+<property name="commit.message" value="Commit message"/>
+<property name="plugin.main.version" value="14260"/>
 <property name="josm.app.dir" value="C:\Users\Władysław Komorek\AppData\Local\JOSM\app"/>
 <property name="josm" location="${josm.app.dir}/josm-custom.jar"/>
-<property name="josm.home" value="${josm.app.dir}" />
+<property name="josm.home" value="${josm.app.dir}"/>
 <property name="plugin.dist.dir" value="dist"/>
 <property name="plugin.build.dir" value="build"/>
 <property name="plugin.lib.dir" value="lib"/>
 <property name="plugin.src.dir" value="src"/>
 <property name="ant.build.javac.target" value="1.8"/>
-
 <property name="build.dir" value="${plugin.build.dir}"/>
 <property name="src.dir" value="${plugin.src.dir}"/>
 <property name="plugin.jar" value="${plugin.dist.dir}/${ant.project.name}.jar"/>
-
 <target name="init">
 <mkdir dir="${plugin.build.dir}"/>
 <delete includeEmptyDirs="true">
@@ -23,19 +19,15 @@
 </delete>
 <mkdir dir="${plugin.build.dir}"/>
 </target>
-
 <target name="compile" depends="init">
 <echo message="compiling sources for ${plugin.jar} ... "/>
-<javac srcdir="${src.dir}"
-       destdir="${build.dir}"
-       release="8"
-       classpath="${josm.home}/josm-custom.jar;${plugin.lib.dir}/jgoodies-forms-1.7.2.jar;${plugin.lib.dir}/jgoodies-common-1.7.0.jar;${plugin.lib.dir}/httpclient-4.5.14.jar;${plugin.lib.dir}/httpcore-4.4.16.jar;${plugin.lib.dir}/commons-codec-1.18.0.jar;${build.dir}">
-    <compilerarg value="-Xlint:deprecation"/>
-    <compilerarg value="-Xlint:unchecked"/>
-    <compilerarg value="-Xlint:-options"/>
+<echo message="Java Home: ${java.home}"/>
+<javac srcdir="${src.dir}" destdir="${build.dir}" release="11" encoding="UTF-8" classpath="${josm.home}/josm-custom.jar;${plugin.lib.dir}/jgoodies-forms-1.7.2.jar;${plugin.lib.dir}/jgoodies-common-1.7.0.jar;${plugin.lib.dir}/httpclient-4.5.14.jar;${plugin.lib.dir}/httpcore-4.4.16.jar;${plugin.lib.dir}/commons-codec-1.18.0.jar">
+<compilerarg value="-Xlint:deprecation"/>
+<compilerarg value="-Xlint:unchecked"/>
+<compilerarg value="-Xlint:-options"/>
 </javac>
 </target>
-
 <target name="dist" depends="compile,revision">
 <echo message="creating ${ant.project.name}.jar ... "/>
 <copy todir="${plugin.build.dir}/images">
@@ -43,11 +35,10 @@
 </copy>
 <copy todir="${plugin.build.dir}">
 <fileset dir=".">
-        <include name="README" />
-       <include name="LICENSE" />
-      </fileset>
-    </copy>
-
+<include name="README"/>
+<include name="LICENSE"/>
+</fileset>
+</copy>
 <echo>${version.entry.commit.date}: ${version.entry.commit.date}</echo>
 <echo>{version.entry.commit.revision}: ${version.entry.commit.revision}</echo>
 <echo>{build.number}: ${build.number}</echo>
@@ -60,42 +51,43 @@
 <attribute name="Plugin-Date" value="${version.entry.commit.date}"/>
 <attribute name="Plugin-Description" value="Simple plugin for taging tombs"/>
 <attribute name="Plugin-Icon" value="images/tomb_icon.png"/>
-<attribute name="Plugin-Link" value="[https://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin](https://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin)"/><attribute name="Plugin-Mainversion" value="\{plugin\.main\.version\}"/>
-<attribute name="Plugin\-Version" value="{version.entry.commit.revision}"/>
+<attribute name="Plugin-Link" value="[https://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin](https://wiki.openstreetmap.org/index.php/JOSM/Plugins/Tomb_Plugin)"/>
+<attribute name="Plugin-Mainversion" value="${plugin.main.version}"/>
+<attribute name="Plugin-Version" value="${version.entry.commit.revision}"/>
 <attribute name="Plugin-Requires" value=""/>
-           </manifest>
-           <restrict>
-               <archives>
-                   <zips>
-<fileset dir="${plugin.lib.dir}" includes="*.jar" excludes="*-sources.jar, *-javadoc.jar" erroronmissingdir="no"/></zips>
+</manifest>
+<restrict>
+<archives>
+<zips>
+<fileset dir="${plugin.lib.dir}" includes="*.jar" excludes="*-sources.jar, *-javadoc.jar" erroronmissingdir="no"/>
+</zips>
 </archives>
 </restrict>
 </jar>
-<copy tofile="${plugin.dist.dir}/${ant.project.name}_v${version.entry.commit.revision}.jar" file="${plugin.jar}" /></target>
+<copy tofile="${plugin.dist.dir}/${ant.project.name}_v${version.entry.commit.revision}.jar" file="${plugin.jar}"/>
+</target>
 <target name="revision">
 <buildnumber/>
 <tstamp>
 <format property="version.entry.commit.date" pattern="yyyy-MM-dd hh:mm aa"/>
 </tstamp>
-<property name="version.entry.commit.revision" value="${build.number}" />
+<property name="version.entry.commit.revision" value="${build.number}"/>
 <echo>{version.entry.commit.date}: ${version.entry.commit.date}</echo>
 <echo>{version.entry.commit.revision}: ${version.entry.commit.revision}</echo>
-<echo>{build.number}: \{build\.number\}</echo>
+<echo>{build.number}: ${build.number}</echo>
 </target>
 <target name="clean">
 <delete dir="${plugin.build.dir}"/>
 <delete file="${plugin.jar}"/>
 </target>
 <target name="install" depends="dist">
-    <property environment="env"/>
-   <condition property="josm.plugins.dir" value="${env.APPDATA}/JOSM/plugins">
-        <os family="windows"/>
-    </condition>
-    <property name="josm.plugins.dir" value="${user.home}/.josm/plugins" unless="josm.plugins.dir"/>
-    <copy file="${plugin.jar}" todir="${josm.plugins.dir}"/>
+<property environment="env"/>
+<condition property="josm.plugins.dir" value="${env.APPDATA}/JOSM/plugins">
+<os family="windows"/>
+</condition>
+<property name="josm.plugins.dir" value="${user.home}/.josm/plugins" unless="josm.plugins.dir"/>
+<copy file="${plugin.jar}" todir="${josm.plugins.dir}"/>
 </target>
-
-
 <target name="core-info">
 <exec append="false" output="core.info.xml" executable="svn" failifexecutionfails="false">
 <env key="LANG" value="C"/>
@@ -104,10 +96,10 @@
 </exec>
 <xmlproperty file="core.info.xml" prefix="coreversion" keepRoot="true" collapseAttributes="true"/>
 <echo>Building against core revision ${coreversion.info.entry.revision}.</echo>
-<delete file="core\.info\.xml" />
+<delete file="core\.info\.xml"/>
 </target>
 <target name="commit-current">
-<echo>Commiting the plugin source with message '{commit.message}' ...</echo>
+<echo>Commiting the plugin source with message '${commit.message}' ...</echo>
 <exec append="true" output="svn.log" executable="svn" failifexecutionfails="false">
 <env key="LANG" value="C"/>
 <arg value="commit"/>
@@ -115,7 +107,6 @@
 <arg value="."/>
 </exec>
 </target>
-
 <target name="update-current">
 <echo>Updating plugin source ...</echo>
 <exec append="true" output="svn.log" executable="svn" failifexecutionfails="false">
@@ -123,56 +114,40 @@
 <arg value="up"/>
 <arg value="."/>
 </exec>
-<echo>Updating \{plugin\.jar\} \.\.\.</echo>
-<exec append="true" output="svn\.log" executable="svn" failifexecutionfails="false">
+<echo>Updating ${plugin.jar} ...</echo>
+<exec append="true" output="svn.log" executable="svn" failifexecutionfails="false">
 <env key="LANG" value="C"/>
 <arg value="up"/>
-<arg value="\.\./dist/{plugin.jar}"/>
+<arg value="../dist/${plugin.jar}"/>
 </exec>
 </target>
-
 <target name="commit-dist">
-        <echo>
-            ***** Properties of published ${plugin.jar} *****
-            Commit message : '${commit.message}'
-            Plugin-Mainversion: ${plugin.main.version}
-            JOSM build version: ${coreversion.info.entry.revision}
-            Plugin-Version : ${version.entry.commit.revision}
-            ***** / Properties of published ${plugin.jar} *****
-        </echo>
-        <echo>
-            Now commiting ${plugin.jar} ...
-        </echo>
+<echo> ***** Properties of published ${plugin.jar} ***** Commit message : '${commit.message}' Plugin-Mainversion: ${plugin.main.version} JOSM build version: ${coreversion.info.entry.revision} Plugin-Version : ${version.entry.commit.revision} ***** / Properties of published ${plugin.jar} ***** </echo>
+<echo> Now commiting ${plugin.jar} ... </echo>
 <exec append="true" output="svn.log" executable="svn" failifexecutionfails="false">
-            <env key="LANG" value="C"/>
-            <arg value="-m '${commit.message}'"/>
-            <arg value="commit"/>
-            <arg value="${plugin.jar}"/>
-        </exec>
-    </target>
-
-    <!-- ** make sure svn is present as a command line tool ** -->
-    <target name="ensure-svn-present">
-        <exec append="true" output="svn.log" executable="svn" failifexecutionfails="false" failonerror="false" resultproperty="svn.exit.code">
-            <env key="LANG" value="C" />
-            <arg value="--version" />
-        </exec>
-        <fail message="Fatal: command 'svn --version' failed. Please make sure svn is installed on your system.">
-            <!-- return code not set at all? Most likely svn isn't installed -->
-            <condition>
-                <not>
-                    <isset property="svn.exit.code" />
-                </not>
-            </condition>
-        </fail>
-        <fail message="Fatal: command 'svn --version' failed. Please make sure a working copy of svn is installed on your system.">
-            <!-- error code from SVN? Most likely svn is not what we are looking on this system -->
-            <condition>
-                <isfailure code="${svn.exit.code}" />
-            </condition>
-        </fail>
-    </target>
-
-<target name="publish" depends="ensure-svn-present,core-info,commit-current,update-current,clean,dist,commit-dist">
+<env key="LANG" value="C"/>
+<arg value="-m '${commit.message}'"/>
+<arg value="commit"/>
+<arg value="${plugin.jar}"/>
+</exec>
 </target>
+<target name="ensure-svn-present">
+<exec append="true" output="svn.log" executable="svn" failifexecutionfails="false" failonerror="false" resultproperty="svn.exit.code">
+<env key="LANG" value="C"/>
+<arg value="--version"/>
+</exec>
+<fail message="Fatal: command 'svn --version' failed. Please make sure svn is installed on your system.">
+<condition>
+<not>
+<isset property="svn.exit.code"/>
+</not>
+</condition>
+</fail>
+<fail message="Fatal: command 'svn --version' failed. Please make sure a working copy of svn is installed on your system.">
+<condition>
+<isfailure code="${svn.exit.code}"/>
+</condition>
+</fail>
+</target>
+<target name="publish" depends="ensure-svn-present,core-info,commit-current,update-current,clean,dist,commit-dist"> </target>
 </project>
