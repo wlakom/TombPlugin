@@ -59,18 +59,7 @@ public class PersonSearchDto {
     public void setName(String name) {
         this.name = name;
     }
-    /**
-     * @return the lived_In
-     */
-    public String getLived_In() {
-        return this.lived_In;
-    }
-    /**
-     * @param lived_In the lived_In to set
-     */
-    public void setLived_In(String lived_In) {
-        this.lived_In = lived_In;
-    }
+
     /**
      * @return the born
      */
@@ -198,3 +187,4 @@ public class PersonSearchDto {
     }
 
 }
+
