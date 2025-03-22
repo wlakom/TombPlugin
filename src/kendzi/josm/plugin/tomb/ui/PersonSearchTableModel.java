@@ -1,69 +1,69 @@
-/*
- * This software is provided "AS IS" without a warranty of any kind.
- * You use it on your own risk and responsibility!!!
- *
- * This file is shared under BSD v3 license.
- * See readme.txt and BSD3 file for details.
- *
- */
+// /*
+ // * This software is provided "AS IS" without a warranty of any kind.
+ // * You use it on your own risk and responsibility!!!
+ // *
+ // * This file is shared under BSD v3 license.
+ // * See readme.txt and BSD3 file for details.
+ // *
+ // */
 
-package kendzi.josm.plugin.tomb.ui;
+// package kendzi.josm.plugin.tomb.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+// import java.util.ArrayList;
+// import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
+// import javax.swing.table.AbstractTableModel;
 
-import kendzi.josm.plugin.tomb.dto.PersonSearchDto;
-import kendzi.josm.plugin.tomb.util.DateService;
+// import kendzi.josm.plugin.tomb.dto.PersonSearchDto;
+// import kendzi.josm.plugin.tomb.util.DateService;
 
-/**
- *
- * @see "http://docs.oracle.com/javase/tutorial/uiswing/components/table.html"
- * 
- * @author Tomasz Kędziora (Kendzi)
- */
-public class PersonSearchTableModel extends AbstractTableModel {
+// /**
+ // *
+ // * @see "http://docs.oracle.com/javase/tutorial/uiswing/components/table.html"
+ // * 
+ // * @author Tomasz Kędziora (Kendzi)
+ // */
+// public class PersonSearchTableModel extends AbstractTableModel {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    // /**
+     // * 
+     // */
+    // private static final long serialVersionUID = 1L;
 
-    DateService dateService = new DateService();
+    // DateService dateService = new DateService();
 
-    private String[] columnNames = {
-            tr("Name of person"),
-            tr("Family_name"),       
-            tr("Date of birth"),
-            tr("Date of death"),
-            tr("Birth place"),
-            tr("Death place"), 
-            tr("Lived_In"),  
-            tr("Description"),  
-            tr("Inscription"),
-            tr("Wikipedia"),
-            tr("Wikidata"),
-    };
+    // private String[] columnNames = {
+            // tr("Name of person"),
+            // tr("Family_name"),       
+            // tr("Date of birth"),
+            // tr("Date of death"),
+            // tr("Birth place"),
+            // tr("Death place"), 
+            // tr("Lived_In"),  
+            // tr("Description"),  
+            // tr("Inscription"),
+            // tr("Wikipedia"),
+            // tr("Wikidata"),
+    // };
 
-    private List<PersonSearchDto> data = new ArrayList<PersonSearchDto>();
+    // private List<PersonSearchDto> data = new ArrayList<PersonSearchDto>();
 
-    public PersonSearchTableModel(List<PersonSearchDto> persons) {
-        this.data = persons;
-    }
+    // public PersonSearchTableModel(List<PersonSearchDto> persons) {
+        // this.data = persons;
+    // }
 
-    public int getColumnCount() {
-        return this.columnNames.length;
-    }
+    // public int getColumnCount() {
+        // return this.columnNames.length;
+    // }
 
-    public int getRowCount() {
-        return this.data.size();
-    }
+    // public int getRowCount() {
+        // return this.data.size();
+    // }
 
-    @Override
-    public String getColumnName(int col) {
-        return this.columnNames[col];
-    }
+    // @Override
+    // public String getColumnName(int col) {
+        // return this.columnNames[col];
+    // }
 
     public String tr(String str) {
         return str;
