@@ -9,12 +9,15 @@
 
 package kendzi.josm.plugin.tomb.ui;
 
+import static org.openstreetmap.josm.tools.I18n.tr;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,8 +28,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+
+import org.openstreetmap.josm.data.osm.OsmPrimitive;
 
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -41,44 +46,52 @@ import com.jgoodies.forms.layout.RowSpec;
 public class TombDialog extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
-    protected JTable personsTable;
-    protected JComboBox cbTombType;
-    protected JTextField txtWikipedia;
-    protected JTextField txtImage;
-
-    protected JComboBox cbReligion;
-    protected JComboBox cbDenomination;
-
-    private JLabel lblReligion;
-    private JLabel lblDenomination;
-    private JLabel lblTombData;
-    private JLabel lblWikipediaArticle;
-    private JLabel lblInscription;
-    private JLabel lblDescription;
-    private JLabel lblImage;
-    private JLabel lblWikimedia_commons;
-    private JLabel lblFlickr;
-    private JLabel lblHistoric;
-    private JComboBox cbHistoric;
+    private JTextField txtWikidata;
+    private JTextField txtSectionName;
+    private JTextField txtSectionRow;
+    private JTextField txtSectionPlace;
+    private JTextField txtRef;
+    private JTextField txtDescription;
+    private AutoCompletingTextField cbHistoric;
+    private AutoCompletingTextField cbTombType;
+    private AutoCompletingTextField cbReligion;
+    private AutoCompletingTextField cbDenomination;
+    private JTextField txtImage;
+    private JTextField txtWikimedia_commons;
+    private JTextField txtFlickr;
+    private JTextField txtWikipedia;
+    private JTable personsTable;
+    private JButton btnAddPerson;
+    private JButton btnRemove;
     private JButton btnSearch;
+    private JLabel lblCemetery = new JLabel(tr("Cemetery"));
+    private AutoCompletingTextField cbCemetery = new AutoCompletingTextField();
+    private JLabel lblDenomination = new JLabel(tr("Denomination"));
+    private JLabel lblInscription = new JLabel(tr("Inscription"));
+    private JLabel lblWikidata = new JLabel(tr("Wikidata"));
+    private JLabel lblSectionName = new JLabel(tr("Section Name"));
+    private JLabel lblSectionRow = new JLabel(tr("Section Row"));
+    private JLabel lblSectionPlace = new JLabel(tr("Section Place"));
+    private JLabel lblRef = new JLabel(tr("Ref"));
+    private JLabel lblDescription = new JLabel(tr("Description"));
+    private JLabel lblHistoric = new JLabel(tr("Historic"));
+    private JLabel lblTombType = new JLabel(tr("Tomb Type"));
+    private JLabel lblReligion = new JLabel(tr("Religion"));
+    private JLabel lblTombData = new JLabel(tr("Tomb Data"));
+    private JLabel lblImage = new JLabel(tr("Image"));
+    private JLabel lblWikimedia_commons = new JLabel(tr("Wikimedia Commons"));
+    private JLabel lblFlickr = new JLabel(tr("Flickr"));
+    private JLabel lblWikipediaArticle = new JLabel(tr("Wikipedia Article"));
+    private OsmPrimitive tombPrimitive;
+    private TombDialogAction tombDialogAction;
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        try {
-            TombDialog dialog = new TombDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    public TombDialog(TombDialogAction action) {
+        super();
+        this.tombDialogAction = action;
+        setTitle("Tomb Editor"); // Ustaw tytuł okna
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-    /**
-     * Create the dialog.
-     */
-    public TombDialog() {
         setTitle("Tomb editor");
         setBounds(100, 100, 1024, 400);
         getContentPane().setLayout(new BorderLayout());
@@ -102,42 +115,40 @@ public class TombDialog extends JDialog {
                         FormSpecs.RELATED_GAP_COLSPEC,
                         ColumnSpec.decode("default:grow"),},
                         new RowSpec[] {
-                        FormSpecs.DEFAULT_ROWSPEC,
-                        FormSpecs.RELATED_GAP_ROWSPEC,
-                        FormSpecs.DEFAULT_ROWSPEC,
-                        FormSpecs.RELATED_GAP_ROWSPEC,
-                        FormSpecs.DEFAULT_ROWSPEC,
-                        FormSpecs.RELATED_GAP_ROWSPEC,
-                        RowSpec.decode("12dlu"),}));
-                    cbHistoric = new JComboBox();
+                                FormSpecs.DEFAULT_ROWSPEC,
+                                FormSpecs.RELATED_GAP_ROWSPEC,
+                                FormSpecs.DEFAULT_ROWSPEC,
+                                FormSpecs.RELATED_GAP_ROWSPEC,
+                                FormSpecs.DEFAULT_ROWSPEC,
+                                FormSpecs.RELATED_GAP_ROWSPEC,
+                                RowSpec.decode("12dlu"),}));
                 {
-                    lblHistoric = new JLabel("Historic kind");
+                    JLabel lblHistoric = new JLabel("Historic kind");
                     lblHistoric.setFont(lblHistoric.getFont().deriveFont(lblHistoric.getFont().getStyle() | Font.BOLD));
                     panel_1.add(lblHistoric, "1, 1, left, default");
                 }
                 {
-                    cbHistoric.setModel(new DefaultComboBoxModel(new String[] {"", "tomb", "memorial"}));
+                    cbHistoric = action.getCbHistoric();
                     cbHistoric.setEditable(true);
                     panel_1.add(cbHistoric, "3, 1, fill, default");
                 }
-              
+
                 {
-                    lblTombData = new JLabel("Tomb data");
+                    JLabel lblTombData = new JLabel("Tomb data");
                     panel_1.add(lblTombData, "5, 1");
                 }
                 {
-                    lblTombType = new JLabel("Tomb type");
+                    JLabel lblTombType = new JLabel("Tomb type");
                     lblTombType.setFont(lblTombType.getFont().deriveFont(lblTombType.getFont().getStyle() | Font.BOLD));
                     panel_1.add(lblTombType, "1, 3, left, default");
                 }
                 {
-                    cbTombType = new JComboBox();
+                    cbTombType = action.getCbTombType();
                     cbTombType.setEditable(true);
-                    cbTombType.setModel(new DefaultComboBoxModel(new String[] {"", "tombstone", "tumulus", "rock-cut", "war_grave", "mausoleum", "columbarium", "pyramid", "sarcophagus", "vault"}));
                     panel_1.add(cbTombType, "3, 3, fill, default");
                 }
                 {
-                    lblWikipediaArticle = new JLabel("- wikipedia article");
+                    JLabel lblWikipediaArticle = new JLabel("- wikipedia article");
                     panel_1.add(lblWikipediaArticle, "5, 3, left, default");
                 }
                 {
@@ -146,56 +157,54 @@ public class TombDialog extends JDialog {
                     txtWikipedia.setColumns(10);
                 }
                 {
-                    lblReligion = new JLabel("Religion");
+                    JLabel lblReligion = new JLabel("Religion");
                     panel_1.add(lblReligion, "1, 5, left, default");
                 }
                 {
-                    cbReligion = new JComboBox();
+                    cbReligion = action.getCbReligion();
                     cbReligion.setEditable(true);
-                    cbReligion.setModel(new DefaultComboBoxModel(new String[] {"", "christian", "jewish", "muslim"}));                    
                     panel_1.add(cbReligion, "3, 5, fill, default");
                 }
-              {
-                    lblDenomination = new JLabel("Denomination");
+                {
+                    JLabel lblDenomination = new JLabel("Denomination");
                     panel_1.add(lblDenomination, "1, 5, left, default");
                 }
                 {
-                    cbDenomination = new JComboBox();
+                    cbDenomination = action.getCbDenomination();
                     cbDenomination.setEditable(true);
-                    cbDenomination.setModel(new DefaultComboBoxModel(new String[] {"", "roman_catholic", "greek_catholic", "orthodox", "protestant",  "conservative", "shia", "sunni"}));
-                     panel_1.add(cbDenomination, "3, 5, fill, default");
+                    panel_1.add(cbDenomination, "3, 5, fill, default");
                 }
-                     
+
                 {
-                    lblImage = new JLabel("- image");
+                    JLabel lblImage = new JLabel("- image");
                     panel_1.add(lblImage, "5, 5, left, default");
                 }
-                
+
                 {
                     txtImage = new JTextField();
                     panel_1.add(txtImage, "7, 5, fill, default");
                     txtImage.setColumns(10);
                 }
-                
+
                 {
-                    lblWikimedia_commons = new JLabel("- wikimedia_commons");
-                    panel_1.add(lblImage, "5, 5, left, default");
+                    JLabel lblWikimedia_commons = new JLabel("- wikimedia_commons");
+                    panel_1.add(lblWikimedia_commons, "5, 5, left, default"); // Poprawka: użyłem lblWikimedia_commons
                 }
                 {
                     txtWikimedia_commons = new JTextField();
                     panel_1.add(txtWikimedia_commons, "7, 5, fill, default");
                     txtWikimedia_commons.setColumns(10);
                 }
-              {
-                    lblFlickr = new JLabel("- flickr");
-                    panel_1.add(lblFlickr, "5, 5, left, default");
+                {
+                    JLabel lblFlickr = new JLabel("- flickr");
+                    panel_1.add(lblFlickr, "5, 5, left, default"); // Poprawka: użyłem lblFlickr
                 }
                 {
                     txtFlickr = new JTextField();
                     panel_1.add(txtFlickr, "7, 5, fill, default");
                     txtFlickr.setColumns(10);
                 }
-                
+
             }
         }
         {
@@ -209,14 +218,8 @@ public class TombDialog extends JDialog {
                 panel.add(scrollPane);
                 {
                     personsTable = new JTable();
-                    //                    personsTable.setRowHeight(17);
-                    //                    personsTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
-                    //                    personsTable.setRowHeight(20);
-
-                    //                    personsTable.getFont().get
                     int fontHeight = personsTable.getFontMetrics(personsTable.getFont()).getHeight();
                     personsTable.setRowHeight(fontHeight + 2);
-
                     personsTable.setModel(new DefaultTableModel(
                             new Object[][] {
                                     {"1", "2", "3"},
@@ -225,7 +228,7 @@ public class TombDialog extends JDialog {
                             new String[] {
                                     "New column", "New column", "New column 1"
                             }
-                            ));
+                    ));
                     scrollPane.setViewportView(personsTable);
                 }
             }
@@ -233,7 +236,7 @@ public class TombDialog extends JDialog {
                 JPanel panel_tableButtons = new JPanel();
                 panel.add(panel_tableButtons, BorderLayout.SOUTH);
                 {
-                    JButton btnAddPerson = new JButton("New");
+                    btnAddPerson = new JButton("New");
                     btnAddPerson.setToolTipText("New person (Ctrl-n)");
                     btnAddPerson.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent arg0) {
@@ -243,12 +246,10 @@ public class TombDialog extends JDialog {
                     panel_tableButtons.add(btnAddPerson);
                 }
                 {
-                    JButton btnRemove = new JButton("Remove");
+                    btnRemove = new JButton("Remove");
                     btnRemove.setToolTipText("Remove person from tomb");
                     btnRemove.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-
-                            ;
                             onRemovePerson(personsTable.getSelectedRows());
                         }
                     });
@@ -285,13 +286,35 @@ public class TombDialog extends JDialog {
                 JButton cancelButton = new JButton("Cancel");
                 cancelButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-
                         dispose();
                     }
                 });
                 cancelButton.setActionCommand("Cancel");
                 buttonPane.add(cancelButton);
             }
+        }
+    }
+
+    public void Load(OsmPrimitive tombPrimitive) {
+        tombDialogAction.Load(tombPrimitive);
+        // Dodatkowa logika ładowania specyficzna dla okna dialogowego, jeśli jest potrzebna
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        pack(); // Ponownie dopasuj rozmiar przed wyświetleniem
+        super.setVisible(b);
+    }
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            TombDialog dialog = new TombDialog(new TombDialogAction()); // Teraz przekazujemy instancję TombDialogAction
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -336,10 +359,10 @@ public class TombDialog extends JDialog {
     public JLabel getLblHistoric() {
         return lblHistoric;
     }
-    public JComboBox getCbTombType() {
-        return cbTombType;
-    }
-    public JComboBox getCbHistoric() {
-        return cbHistoric;
-    }
+public AutoCompletingTextField getCbTombType() {
+    return cbTombType;
+}
+public AutoCompletingTextField getCbHistoric() {
+    return cbHistoric;
+}
 }
