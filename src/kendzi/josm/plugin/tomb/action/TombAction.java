@@ -9,77 +9,45 @@
 
 package kendzi.josm.plugin.tomb.action;
 
-import static org.openstreetmap.josm.tools.I18n.*;
-
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Collection;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 import org.openstreetmap.josm.actions.JosmAction;
 import org.openstreetmap.josm.data.osm.OsmPrimitive;
 import org.openstreetmap.josm.gui.MainApplication;
-import org.openstreetmap.josm.tools.Shortcut;
 
+import kendzi.josm.plugin.tomb.ui.TombDialog;
 import kendzi.josm.plugin.tomb.ui.TombDialogAction;
 
 public class TombAction extends JosmAction {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    private TombDialogAction dialogAction;
 
     public TombAction() {
-        super(tr("Tomb plugin"),
-                "tomb_icon.png",
-                tr(""),
-                Shortcut.registerShortcut("tools:Tomb plugin",
-                        tr("Tool: {0}", tr("Tomb")),
-                        KeyEvent.VK_C,
-                        Shortcut.SHIFT
-                        ),
-                        true);
+        super("Tomb Plugin", "Tomb plugin icon", "Add/edit tomb related tags", null, false);
+        this.dialogAction = new TombDialogAction();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-
-        Collection<OsmPrimitive> selectedPrimitive = MainApplication.getLayerManager().getEditDataSet().getSelectedNodesAndWays();
-
-        if (selectedPrimitive.size() != 1) {
-            JOptionPane.showMessageDialog(null,
-                    tr("Choose one node or way"),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+        if (MainApplication.getLayerManager().getActiveDataSet() == null) {
             return;
         }
-
-        OsmPrimitive tombPrimitive = selectedPrimitive.iterator().next();
-
-
-        try {
-            TombDialogAction dialog = new TombDialogAction();
-            
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-            dialog.Load(tombPrimitive);
-
-            dialog.setVisible(true);
-
-
-        } catch (Exception ee) {
-            ee.printStackTrace();
-        }
-
-
-
-
+        // if (getParticipatingSelection().size() == 1) {
+        //     OsmPrimitive primitive = getParticipatingSelection().get(0);
+            try {
+                TombDialog dialog = new TombDialog(dialogAction);
+                // dialog.Load(primitive);
+                dialog.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace(); // Wypisz ślad stosu błędów
+            }
+        // } else if (!getParticipatingSelection().isEmpty()) {
+            System.out.println("Zaznacz jeden obiekt, aby edytować dane grobu.");
+        // }
     }
 
     @Override
     protected void updateEnabledState() {
-        setEnabled(getLayerManager().getEditDataSet() != null);
+        // setEnabled(getParticipatingSelection().size() == 1);
+        setEnabled(true);
     }
 }
